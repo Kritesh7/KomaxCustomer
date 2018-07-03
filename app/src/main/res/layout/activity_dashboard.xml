@@ -1,0 +1,226 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dashboard_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="1dp">
+
+                    <Button
+                        android:id="@+id/btn_call_us"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#009999"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="@string/call_us"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/btn_call_us"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="33dp"
+                        android:elevation="2dp"
+                        android:padding="20dp"
+                        app:srcCompat="@drawable/ic_call_us1" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="2dp">
+
+                    <Button
+                        android:id="@+id/btn_arrange_call"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#999933"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="@string/arrange_call"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/btn_arrange_call"
+                        android:layout_marginBottom="33dp"
+                        android:elevation="2dp"
+                        android:padding="20dp"
+                        app:srcCompat="@drawable/ic_call" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="1dp">
+
+                    <Button
+                        android:id="@+id/btn_raise_complaint"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#CC6600"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:text="Raise Request"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="33dp"
+                        android:elevation="2dp"
+                        android:padding="20dp"
+                        app:srcCompat="@drawable/ic_raise_complain" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="2dp">
+
+                    <Button
+                        android:id="@+id/btn_complaint"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#07774E"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:text="Service Request"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/btn_complaint"
+                        android:layout_marginBottom="33dp"
+                        android:elevation="2dp"
+                        android:padding="20dp"
+                        app:srcCompat="@drawable/ic_complaint" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="1dp">
+
+                    <Button
+                        android:id="@+id/btn_machines"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#009DCC"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:text="@string/machines"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="33dp"
+                        android:elevation="2dp"
+                        android:padding="20dp"
+                        app:srcCompat="@drawable/ic_machine" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="2dp">
+
+                    <Button
+                        android:id="@+id/btn_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#CC005E"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:text="@string/feedback"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="33dp"
+                        android:layout_marginTop="0dp"
+                        android:elevation="2dp"
+                        android:padding="20dp"
+                        app:srcCompat="@drawable/ic_feedback" />
+                    <!--app:srcCompat="@drawable/ic_light_bulb"-->
+
+                </RelativeLayout>
+            </TableRow>
+
+
+        </TableLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="#FFFFFF">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <!-- Complain No -->
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/complainTitle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="0dp"
+                                    android:layout_weight="1"
+                                    android:text=""
+                                    android:textColor="#00f"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:text="@string/machine_no"
+                                    android:textStyle="bold" />
+
+
+                                <TextView
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".5"
+                                    android:text=":"
+                                    android:textStyle="bold" />
+
+
+                                <TextView
+                                    android:id="@+id/tvSeriolNo"
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="5.5"
+                                    android:text="" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:text="@string/complaint_no"
+                                    android:textStyle="bold" />
+
+
+                                <TextView
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".5"
+                                    android:text=":"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvComplainNo"
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="5.5"
+                                    android:text="" />
+
+
+                            </LinearLayout>
+
+
+                            <!-- Punctuality -->
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+
+                                <TextView
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:text="@string/resolved_by"
+                                    android:textStyle="bold" />
+
+
+                                <TextView
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".5"
+                                    android:text=":"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/eng_nametxt"
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="5.5"
+                                    android:text="" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="5dp"
+                                android:background="#e0e0e0"
+                                android:elevation=".5dp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_weight="1"
+                                android:text="@string/punctuality"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <RatingBar
+                                android:id="@+id/rbPunctuality"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_weight="1"
+                                android:numStars="5"
+                                android:progressTint="#0044cc"
+                                android:scaleX="0.6"
+                                android:scaleY="0.6" />
+
+                            <!-- TechnicianCapability -->
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_weight="1"
+                                android:text="@string/technician_capability"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <RatingBar
+                                android:id="@+id/rbTechnicianCapability"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_weight="1"
+                                android:numStars="5"
+                                android:progressTint="#0044cc"
+                                android:scaleX="0.6"
+                                android:scaleY="0.6" />
+
+
+                            <!-- CustomerCentricity -->
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_weight="1"
+                                android:text="@string/customer_centricity"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <RatingBar
+                                android:id="@+id/rbCustomerCentricity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_weight="1"
+                                android:numStars="5"
+                                android:progressTint="#0044cc"
+                                android:scaleX="0.6"
+                                android:scaleY="0.6" />
+
+                            <!-- OverAllExperience -->
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/overall_experience"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <RatingBar
+                                android:id="@+id/rbOverAllExperience"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_weight="1"
+                                android:numStars="5"
+                                android:progressTint="#0044cc"
+                                android:scaleX="0.6"
+                                android:scaleY="0.6" />
+
+                            <!-- Remark -->
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                android:layout_weight="1"
+                                android:text="@string/remark"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/etRemark"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_marginTop="3dp"
+                                android:background="@drawable/edit_text_box_enable_disable"
+                                android:ems="10"
+                                android:gravity="top"
+                                android:hint="@string/write_your_remark"
+                                android:inputType="textMultiLine"
+                                android:padding="10dp"
+                                android:textColor="#000000"
+                                android:textColorHint="#696969"
+                                android:textSize="15sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnSubmit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|top"
+                                    android:background="@drawable/mybutton"
+                                    android:gravity="center"
+                                    android:padding="8dp"
+                                    android:text="@string/submit"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+
+                                <Button
+                                    android:id="@+id/btnCancel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/mybutton"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="@string/cancel"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+</LinearLayout>
