@@ -90,7 +90,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
     LinearLayout maincontainer;
 
-    TextView tv_subject,tv_refrence,tv_message;
+    TextView tv_subject, tv_refrence, tv_message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,17 +108,17 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
         SimpleSpanBuilder ssbSubject = new SimpleSpanBuilder();
         ssbSubject.appendWithSpace("Subject");
-        ssbSubject.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbSubject.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_subject.setText(ssbSubject.build());
 
         SimpleSpanBuilder ssbRefernce = new SimpleSpanBuilder();
         ssbRefernce.appendWithSpace("Reference");
-        ssbRefernce.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbRefernce.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_refrence.setText(ssbRefernce.build());
 
         SimpleSpanBuilder ssbMessage = new SimpleSpanBuilder();
         ssbMessage.appendWithSpace("Message");
-        ssbMessage.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbMessage.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_message.setText(ssbMessage.build());
 
         txt_subject = findViewById(R.id.txt_subject);
@@ -254,8 +254,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
             btnOK = (Button) layout.findViewById(R.id.btnOK);
-       //     tvEmptyView = (TextView) layout.findViewById(R.id.tvEmptyView);
-         //   ImgList = (ListView) layout.findViewById(R.id.ImgList);
+            //     tvEmptyView = (TextView) layout.findViewById(R.id.tvEmptyView);
+            //   ImgList = (ListView) layout.findViewById(R.id.ImgList);
 
             //tvEmptyView.setVisibility(View.VISIBLE);
 //            ImgList.setEmptyView(tvEmptyView);
@@ -425,7 +425,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                         Intent i = new Intent(FeedbackActivity.this, LoginActivity.class);
                         startActivity(i);
                         finish();
-                    }else if(flag == 5){
+                    } else if (flag == 5) {
                         ScanckBar();
                         btn_submit_feedback.setEnabled(false);
 

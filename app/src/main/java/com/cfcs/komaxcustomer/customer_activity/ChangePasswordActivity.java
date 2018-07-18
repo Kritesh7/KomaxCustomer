@@ -46,7 +46,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     LinearLayout maincontainer;
 
-    TextView tv_old_password,tv_new_password,tv_confirm_password;
+    TextView tv_old_password, tv_new_password, tv_confirm_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +64,17 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         SimpleSpanBuilder ssbOldPass = new SimpleSpanBuilder();
         ssbOldPass.appendWithSpace("Old Password");
-        ssbOldPass.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbOldPass.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_old_password.setText(ssbOldPass.build());
 
         SimpleSpanBuilder ssbNewPass = new SimpleSpanBuilder();
         ssbNewPass.appendWithSpace("New Password");
-        ssbNewPass.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbNewPass.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_new_password.setText(ssbNewPass.build());
 
         SimpleSpanBuilder ssbConfirmPass = new SimpleSpanBuilder();
         ssbConfirmPass.appendWithSpace("Re-enter Password");
-        ssbConfirmPass.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbConfirmPass.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_confirm_password.setText(ssbConfirmPass.build());
 
         txt_old_paasword = findViewById(R.id.txt_old_password);
@@ -199,7 +199,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                flag =5;
+                flag = 5;
             }
             return null;
         }
@@ -231,7 +231,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     Intent i = new Intent(ChangePasswordActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();
-                }else if(flag == 5){
+                } else if (flag == 5) {
                     ScanckBar();
                     btn_submit.setEnabled(true);
                 }

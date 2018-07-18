@@ -226,7 +226,7 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                flag =5;
+                flag = 5;
             }
             return null;
         }
@@ -252,7 +252,7 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
                     Intent i = new Intent(ComplainFeedbackActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();
-                }else if(flag == 5){
+                } else if (flag == 5) {
                     ScanckBar();
                     btnSubmit.setEnabled(false);
                 }

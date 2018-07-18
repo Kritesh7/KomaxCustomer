@@ -80,7 +80,7 @@ public class ArrangeCallActivity extends AppCompatActivity {
                 Config_Customer.isOnline(ArrangeCallActivity.this);
                 if (Config_Customer.internetStatus == true) {
 
-                    if (isValidMobile(txt_arrange_mobile_no.getText().toString().trim())) {
+                    if (txt_arrange_mobile_no.getText().toString().trim().compareTo("")!=0) {
                         Config_Customer.putSharedPreferences(ArrangeCallActivity.this, "pref_Customer", "MobileNo", txt_arrange_mobile_no.getText().toString());
                         new ArrangeCallAsyntask().execute();
 
@@ -93,7 +93,6 @@ public class ArrangeCallActivity extends AppCompatActivity {
                 } else {
                     Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", ArrangeCallActivity.this);
                 }
-
 
             }
         });

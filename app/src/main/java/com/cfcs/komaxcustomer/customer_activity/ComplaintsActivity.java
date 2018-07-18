@@ -143,13 +143,13 @@ public class ComplaintsActivity extends AppCompatActivity {
 
     ArrayAdapter<String> spinneradapterPlant;
 
-    int Plantcount =0;
+    int Plantcount = 0;
 
     CoordinatorLayout maincontainer;
 
     String status;
 
-    Button btn_search_find,btn_search_clear;
+    Button btn_search_find, btn_search_clear;
 
     AlertDialog dialog;
 
@@ -345,7 +345,7 @@ public class ComplaintsActivity extends AppCompatActivity {
             int spinnerPosition = spinneradapterPlant.getPosition(ComparedPlantName);
             spinner_plant.setSelection(spinnerPosition);
 
-        }else if(Plantcount == 1){
+        } else if (Plantcount == 1) {
             spinner_plant.setSelection(1);
         }
 
@@ -403,7 +403,7 @@ public class ComplaintsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // TODO Auto-generated method stub
-                new DatePickerDialog(ComplaintsActivity.this,android.R.style.Theme_Holo_Dialog, date_from, myCalendar
+                new DatePickerDialog(ComplaintsActivity.this, android.R.style.Theme_Holo_Dialog, date_from, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -415,7 +415,7 @@ public class ComplaintsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // TODO Auto-generated method stub
-                new DatePickerDialog(ComplaintsActivity.this,android.R.style.Theme_Holo_Dialog, date_to, myCalendar
+                new DatePickerDialog(ComplaintsActivity.this, android.R.style.Theme_Holo_Dialog, date_to, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
@@ -586,7 +586,6 @@ public class ComplaintsActivity extends AppCompatActivity {
                 } else {
                     Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", ComplaintsActivity.this);
                 }
-
 
 
             }
@@ -797,7 +796,7 @@ public class ComplaintsActivity extends AppCompatActivity {
                             Intent i = new Intent(ComplaintsActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
-                        }else if(flag == 5){
+                        } else if (flag == 5) {
 
                             ScanckBar();
                             progressDialog.dismiss();
@@ -855,7 +854,7 @@ public class ComplaintsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(ComplaintsActivity.this,"Loading","Please wait..",true,false);
+            progressDialog = ProgressDialog.show(ComplaintsActivity.this, "Loading", "Please wait..", true, false);
         }
 
         @Override
@@ -917,9 +916,9 @@ public class ComplaintsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(flag == 2){
+            if (flag == 2) {
 
-            }else if (flag == 5){
+            } else if (flag == 5) {
                 ScanckBar();
                 list.setAdapter(null);
             }
@@ -1026,7 +1025,7 @@ public class ComplaintsActivity extends AppCompatActivity {
 
 
                     for (int i = 0; i < jsonArray2.length(); i++) {
-                       Plantcount += 1;
+                        Plantcount += 1;
                         JSONObject jsonObject2 = jsonArray2.getJSONObject(i);
                         String SiteID = jsonObject2.getString("SiteID");
                         String SiteName = jsonObject2.getString("SiteName");
@@ -1057,7 +1056,7 @@ public class ComplaintsActivity extends AppCompatActivity {
                 finish();
 
 
-            }else if (flag == 5){
+            } else if (flag == 5) {
                 ScanckBar();
                 progressDialog.dismiss();
 //                list.setAdapter(null);
@@ -1168,7 +1167,7 @@ public class ComplaintsActivity extends AppCompatActivity {
                         int spinnerPosition = spinneradapter.getPosition(ComparedModel);
                         spinner_machine.setSelection(spinnerPosition);
 
-                    } else if(count == 1){
+                    } else if (count == 1) {
                         spinner_machine.setSelection(1);
                     }
 
@@ -1188,7 +1187,7 @@ public class ComplaintsActivity extends AppCompatActivity {
                 Intent i = new Intent(ComplaintsActivity.this, LoginActivity.class);
                 startActivity(i);
                 finish();
-            }else  if(flag == 5){
+            } else if (flag == 5) {
                 ScanckBar();
                 dialog.dismiss();
             }

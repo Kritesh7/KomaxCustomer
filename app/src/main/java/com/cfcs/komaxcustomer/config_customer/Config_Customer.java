@@ -19,8 +19,8 @@ import com.cfcs.komaxcustomer.LoginActivity;
 
 public class Config_Customer {
 
-    public static String BASE_URL = "http://192.168.1.200:8080/";
-//    public static String BASE_URL = "https://app.komaxindia.co.in/";
+//    public static String BASE_URL = "http://192.168.1.200:8080/";
+    public static String BASE_URL = "https://app.komaxindia.co.in/";
     public static boolean internetStatus = false;
 
     public static void putSharedPreferences(Context context, String preferences, String key, String value) {

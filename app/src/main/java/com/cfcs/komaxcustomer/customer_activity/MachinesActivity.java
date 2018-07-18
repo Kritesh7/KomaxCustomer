@@ -85,7 +85,6 @@ public class MachinesActivity extends AppCompatActivity {
 
     List<String> spinnerlist;
 
-
     // int ws = -1;
 
     String siteID, siteName;
@@ -111,9 +110,9 @@ public class MachinesActivity extends AppCompatActivity {
     ArrayAdapter<String> spinneradapterPlant;
     ArrayAdapter<String> spinneradapterTrans;
 
-    int Plantcount =0;
+    int Plantcount = 0;
 
-    Button btn_search_find,btn_search_clear;
+    Button btn_search_find, btn_search_clear;
 
     AlertDialog dialog;
 
@@ -196,7 +195,7 @@ public class MachinesActivity extends AppCompatActivity {
         if (!ComparePlant.equalsIgnoreCase("")) {
             int spinnerpos = spinneradapterPlant.getPosition(ComparePlant);
             spinner_palnt.setSelection(spinnerpos);
-        }else if(Plantcount == 1){
+        } else if (Plantcount == 1) {
             spinner_palnt.setSelection(1);
         }
 
@@ -417,7 +416,7 @@ public class MachinesActivity extends AppCompatActivity {
 
 
                     for (int i = 0; i < jsonArray2.length(); i++) {
-                        Plantcount +=1;
+                        Plantcount += 1;
                         JSONObject jsonObject2 = jsonArray2.getJSONObject(i);
                         String SiteID = jsonObject2.getString("SiteID");
                         String SiteName = jsonObject2.getString("SiteName");
@@ -430,7 +429,6 @@ public class MachinesActivity extends AppCompatActivity {
 
                     spinneradapterPlant = new ArrayAdapter<String>(MachinesActivity.this, android.R.layout.simple_spinner_item, siteNameList);
                     spinneradapterPlant.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
 
 
                 } catch (JSONException e) {
@@ -473,7 +471,7 @@ public class MachinesActivity extends AppCompatActivity {
                 finish();
 
 
-            }else if(flag == 5){
+            } else if (flag == 5) {
                 ScanckBar();
                 list.setAdapter(null);
             }
@@ -594,7 +592,7 @@ public class MachinesActivity extends AppCompatActivity {
                 Intent i = new Intent(MachinesActivity.this, LoginActivity.class);
                 startActivity(i);
                 finish();
-            }else if(flag == 5){
+            } else if (flag == 5) {
                 ScanckBar();
                 dialog.dismiss();
             }
@@ -773,7 +771,7 @@ public class MachinesActivity extends AppCompatActivity {
                             Intent i = new Intent(MachinesActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
-                        }else if(flag == 5){
+                        } else if (flag == 5) {
 
                             ScanckBar();
                             list.setAdapter(null);

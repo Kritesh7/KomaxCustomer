@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,11 +43,13 @@ import com.cfcs.komaxcustomer.models.PendingFeedbackDataModel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -71,6 +75,9 @@ public class DashboardActivity extends AppCompatActivity {
     TextView tvComplainNo, complainTitle, tvSeriolNo;
     EditText etRemark;
 
+    String currentVersion = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +88,23 @@ public class DashboardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+
+        try {
+            currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Config_Customer.isOnline(DashboardActivity.this);
+        if (Config_Customer.internetStatus == true) {
+
+            new ForceUpdateAsync(currentVersion).execute();
+
+        } else {
+            Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", DashboardActivity.this);
+            finish();
+        }
 
 
         String PendingFeedBack = Config_Customer.getSharedPreferences(DashboardActivity.this, "pref_Customer", "PendingFeedback", "");
@@ -163,7 +187,6 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -585,4 +608,61 @@ public class DashboardActivity extends AppCompatActivity {
         super.onDestroy();
         Config_Customer.putSharedPreferences(DashboardActivity.this, "pref_Customer", "PendingFeedback", "0");
     }
+
+    public class ForceUpdateAsync extends AsyncTask<String, String, JSONObject> {
+
+        private String latestVersion;
+        private String currentVersion;
+
+        public ForceUpdateAsync(String currentVersion) {
+            this.currentVersion = currentVersion;
+
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+
+            try {
+                latestVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName() + "&hl=en")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get()
+                        .select("div.hAyfc:nth-child(4) > span:nth-child(2) > div:nth-child(1) > span:nth-child(1)")
+                        .first()
+                        .ownText();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new JSONObject();
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if (latestVersion != null && !latestVersion.isEmpty()) {
+                if (Float.valueOf(currentVersion) < Float.valueOf(latestVersion)) {
+                    //show dialog
+                    showForceUpdateDialog();
+                }
+            }
+            super.onPostExecute(jsonObject);
+        }
+
+        public void showForceUpdateDialog() {
+            android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(DashboardActivity.this,
+                    R.style.AppTheme));
+
+            alertDialogBuilder.setTitle(DashboardActivity.this.getString(R.string.youAreNotUpdatedTitle));
+            alertDialogBuilder.setMessage(DashboardActivity.this.getString(R.string.youAreNotUpdatedMessage) + " " + latestVersion + DashboardActivity.this.getString(R.string.youAreNotUpdatedMessage1));
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton(R.string.update1, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    DashboardActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + DashboardActivity.this.getPackageName())));
+                    dialog.cancel();
+                }
+            });
+            alertDialogBuilder.show();
+        }
+    }
+
 }

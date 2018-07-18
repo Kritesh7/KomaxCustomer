@@ -361,7 +361,7 @@ public class ComplainListDetailActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
 
-            }else if(flag == 5){
+            } else if (flag == 5) {
 
                 ScanckBar();
 

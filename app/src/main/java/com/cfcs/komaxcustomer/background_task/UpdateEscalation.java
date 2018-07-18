@@ -75,13 +75,13 @@ public class UpdateEscalation extends AsyncTask<String, String, String> {
                 JSONArray jsonArray = new JSONArray(EscalationList);
                 JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-                if(jsonObject.has("status")){
+                if (jsonObject.has("status")) {
                     LoginStatus = jsonObject.getString("status");
                     msgstatus = jsonObject.getString("MsgNotification");
-                    if(LoginStatus.equals(invalid)){
+                    if (LoginStatus.equals(invalid)) {
 
                         flag = 4;
-                    }else {
+                    } else {
 
                         flag = 1;
                     }
@@ -108,13 +108,13 @@ public class UpdateEscalation extends AsyncTask<String, String, String> {
             intent.putExtra("status", status);
             context.startActivity(intent);
 
-        } else if(flag ==3){
+        } else if (flag == 3) {
             Config_Customer.toastShow("No Response", context);
 
-        }else  if(flag == 4) {
-                Config_Customer.toastShow(msgstatus, context);
-                Intent i = new Intent(context, LoginActivity.class);
-                context.startActivity(i);
+        } else if (flag == 4) {
+            Config_Customer.toastShow(msgstatus, context);
+            Intent i = new Intent(context, LoginActivity.class);
+            context.startActivity(i);
 
         }
         progressDialog.dismiss();

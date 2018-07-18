@@ -142,7 +142,7 @@ public class MachineListAdapter extends BaseAdapter {
     }
 
     class MyViewHolder {
-        TextView txt_srno, txt_serial_no, txt_principal_name, txt_model,txt_plant, txt_customer, txt_type, txt_wa_start_date, txt_wa_end_date;
+        TextView txt_srno, txt_serial_no, txt_principal_name, txt_model, txt_plant, txt_customer, txt_type, txt_wa_start_date, txt_wa_end_date;
         CardView traning_main_lay;
         LinearLayout card_view_machine;
 

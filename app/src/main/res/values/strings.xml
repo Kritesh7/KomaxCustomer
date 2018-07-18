@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Komax Cust</string>
+    <string name="app_name">Komax Customer</string>
 
     <string name="customerLogin">Customer Login</string>
     <string name="userName">User Name</string>
@@ -8,7 +8,7 @@
 
     <string name="youAreNotUpdatedTitle">Update Available</string>
     <string name="youAreNotUpdatedMessage">A new version of Komax Customer is available. Please update to version\s</string>
-    <string name="youAreNotUpdatedMessage1">\s now</string>
+    <string name="youAreNotUpdatedMessage1">\ now</string>
     <string name="update1">Update</string>
 
     <!-- Complain Detail Activity -->

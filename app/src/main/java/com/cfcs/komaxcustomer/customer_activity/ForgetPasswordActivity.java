@@ -58,6 +58,7 @@ public class ForgetPasswordActivity extends Activity {
             public void onClick(View view) {
                 Intent i = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 

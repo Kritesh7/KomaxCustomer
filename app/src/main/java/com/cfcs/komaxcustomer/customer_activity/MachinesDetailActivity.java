@@ -180,7 +180,7 @@ public class MachinesDetailActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                flag =5;
+                flag = 5;
             }
             return machine_detail_value;
         }
@@ -244,7 +244,7 @@ public class MachinesDetailActivity extends AppCompatActivity {
                     Intent i = new Intent(MachinesDetailActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();
-                }else if(flag ==5){
+                } else if (flag == 5) {
 
                     ScanckBar();
 

@@ -45,7 +45,6 @@ public class LoginActivity extends Activity {
     ProgressDialog progressDialog;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +57,21 @@ public class LoginActivity extends Activity {
         btn_submit = findViewById(R.id.btn_submit);
         forgotPassword = findViewById(R.id.forgotPassword);
 
+        String Username = Config_Customer.getSharedPreferences(LoginActivity.this, "pref_Customer", "UserName", "");
+        txt_user_name.setText(Username);
+        userName = txt_user_name.getText().toString().trim();
+        userPass = txt_user_pass.getText().toString().trim();
+
+        if(userName.compareTo("") != 0){
+            txt_user_pass.requestFocus();
+        }else {
+            txt_user_name.requestFocus();
+        }
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                userName = txt_user_name.getText().toString().trim();
-                userPass = txt_user_pass.getText().toString().trim();
                 if (userName.compareTo("") != 0 && userPass.compareTo("") != 0) {
                     Config_Customer.isOnline(LoginActivity.this);
                     if (Config_Customer.internetStatus == true) {
@@ -97,6 +104,7 @@ public class LoginActivity extends Activity {
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
                 startActivity(i);
+                finish();
             }
         });
     }
@@ -194,11 +202,11 @@ public class LoginActivity extends Activity {
     }
 
     private void login() {
-        String CheckProfile ="0";
+        String CheckProfile = "0";
 
-      CheckProfile =  Config_Customer.getSharedPreferences(LoginActivity.this,"pref_Customer","FirstProfileCheck","");
+        CheckProfile = Config_Customer.getSharedPreferences(LoginActivity.this, "pref_Customer", "FirstProfileCheck", "");
 
-        if (CheckProfile.compareTo("1")==0) {
+        if (CheckProfile.compareTo("1") == 0) {
             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
             startActivity(intent);
             Config_Customer.toastShow("Login Success", LoginActivity.this);

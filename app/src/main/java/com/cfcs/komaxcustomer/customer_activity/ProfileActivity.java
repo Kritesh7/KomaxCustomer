@@ -50,14 +50,14 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     Button btn_update;
-    EditText txt_profile_name, txt_profile_designation, txt_profile_user_name, txt_profile_email, txt_profile_mobile,txt_country_code,txt_other_contacts;
+    EditText txt_profile_name, txt_profile_designation, txt_profile_user_name, txt_profile_email, txt_profile_mobile, txt_country_code, txt_other_contacts;
 
 
-    String profileName = "", designation = "", loginName = "", email = "", mobileNo = "",countryCode ="",otherContact="";
+    String profileName = "", designation = "", loginName = "", email = "", mobileNo = "", countryCode = "", otherContact = "";
 
     LinearLayout maincontainer;
 
-    TextView tv_name,tv_login_user_name,tv_country_code;
+    TextView tv_name, tv_login_user_name, tv_country_code;
 
 
     @Override
@@ -76,17 +76,17 @@ public class ProfileActivity extends AppCompatActivity {
 
         SimpleSpanBuilder ssbName = new SimpleSpanBuilder();
         ssbName.appendWithSpace("Name");
-        ssbName.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbName.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_name.setText(ssbName.build());
 
         SimpleSpanBuilder ssbLogin_user_name = new SimpleSpanBuilder();
         ssbLogin_user_name.appendWithSpace("Login User Name");
-        ssbLogin_user_name.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbLogin_user_name.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_login_user_name.setText(ssbLogin_user_name.build());
 
         SimpleSpanBuilder ssbCountryCode = new SimpleSpanBuilder();
         ssbCountryCode.appendWithSpace("Country Code + Mobile No");
-        ssbCountryCode.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbCountryCode.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_country_code.setText(ssbCountryCode.build());
 
         txt_profile_name = findViewById(R.id.txt_profile_name);
@@ -121,7 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
                 mobileNo = String.valueOf(isValidMobile(txt_profile_mobile.getText().toString().trim()));
                 countryCode = txt_country_code.getText().toString().trim();
                 otherContact = txt_other_contacts.getText().toString().trim();
-                if ((profileName.compareTo("") != 0) &&(countryCode.compareTo("") !=0)&& (loginName.compareTo("") != 0) && (mobileNo.compareTo("") != 0) && isValidMobile(txt_profile_mobile.getText().toString().trim()) && isValidMail(txt_profile_email.getText().toString().trim())) {
+                if ((profileName.compareTo("") != 0) && (countryCode.compareTo("") != 0) && (loginName.compareTo("") != 0) && (mobileNo.compareTo("") != 0) && isValidMobile(txt_profile_mobile.getText().toString().trim()) && isValidMail(txt_profile_email.getText().toString().trim())) {
                     btn_update.setClickable(false);
 
                     Config_Customer.isOnline(ProfileActivity.this);
@@ -145,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity {
                     } else if (TextUtils.isEmpty(email)) {
                         Config_Customer.alertBox("Please Enter Email", ProfileActivity.this);
                         txt_profile_email.requestFocus();
-                    }else if(TextUtils.isEmpty(countryCode)){
+                    } else if (TextUtils.isEmpty(countryCode)) {
                         Config_Customer.alertBox("Please Enter Country Code", ProfileActivity.this);
                         txt_country_code.requestFocus();
                     } else if (TextUtils.isEmpty(mobileNo)) {
@@ -306,7 +306,7 @@ public class ProfileActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
 
-                }else if(flag == 5){
+                } else if (flag == 5) {
 
                     ScanckBar();
                     btn_update.setEnabled(false);
@@ -441,7 +441,7 @@ public class ProfileActivity extends AppCompatActivity {
                             Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
-                        }else if (flag == 5){
+                        } else if (flag == 5) {
 
                             ScanckBar();
                             btn_update.setEnabled(false);

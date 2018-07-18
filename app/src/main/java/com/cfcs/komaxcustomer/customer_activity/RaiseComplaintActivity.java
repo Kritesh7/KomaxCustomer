@@ -114,7 +114,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
 
     LinearLayout maincontainer;
 
-    TextView tv_request_title,tv_problem_date,tv_plant,tv_machine_serial,tv_machine_model;
+    TextView tv_request_title, tv_problem_date, tv_plant, tv_machine_serial, tv_machine_model;
 
 
     @Override
@@ -130,32 +130,32 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         tv_request_title = findViewById(R.id.tv_request_title);
         tv_problem_date = findViewById(R.id.tv_problem_date);
         tv_machine_serial = findViewById(R.id.tv_machine_serial);
-        tv_plant =  findViewById(R.id.tv_plant);
+        tv_plant = findViewById(R.id.tv_plant);
         tv_machine_model = findViewById(R.id.tv_machine_model);
 
         SimpleSpanBuilder ssbRequest = new SimpleSpanBuilder();
         ssbRequest.appendWithSpace("Request Title");
-        ssbRequest.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbRequest.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_request_title.setText(ssbRequest.build());
 
         SimpleSpanBuilder ssbProblemDate = new SimpleSpanBuilder();
         ssbProblemDate.appendWithSpace("Problem Occurred At");
-        ssbProblemDate.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbProblemDate.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_problem_date.setText(ssbProblemDate.build());
 
         SimpleSpanBuilder ssbMachineSerial = new SimpleSpanBuilder();
         ssbMachineSerial.appendWithSpace("Machine Serial No");
-        ssbMachineSerial.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbMachineSerial.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_machine_serial.setText(ssbMachineSerial.build());
 
         SimpleSpanBuilder ssbPlant = new SimpleSpanBuilder();
         ssbPlant.appendWithSpace("Plant");
-        ssbPlant.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbPlant.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_plant.setText(ssbPlant.build());
 
         SimpleSpanBuilder ssbMachineModel = new SimpleSpanBuilder();
         ssbMachineModel.appendWithSpace("Machine Model");
-        ssbMachineModel.append("*",new ForegroundColorSpan(Color.RED),new RelativeSizeSpan(1));
+        ssbMachineModel.append("*", new ForegroundColorSpan(Color.RED), new RelativeSizeSpan(1));
         tv_machine_model.setText(ssbMachineModel.build());
 
         txt_complaint_date = findViewById(R.id.txt_complaint_date);
@@ -385,7 +385,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,android.R.style.Theme_Holo_Dialog,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Dialog,
                 new DatePickerDialog.OnDateSetListener() {
 
                     @Override
@@ -438,7 +438,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         mMinute = c.get(Calendar.MINUTE);
 
         // Launch Time Picker Dialog
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,android.R.style.Theme_Holo_Dialog,
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, android.R.style.Theme_Holo_Dialog,
                 new TimePickerDialog.OnTimeSetListener() {
 
                     @Override
@@ -627,7 +627,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     Intent i = new Intent(RaiseComplaintActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();
-                }else if (flag ==5){
+                } else if (flag == 5) {
 
                     ScanckBar();
                     btn_submit.setEnabled(false);
@@ -715,7 +715,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                flag =5;
+                flag = 5;
             }
             return null;
         }
@@ -761,7 +761,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             } else if (flag == 3) {
                 Config_Customer.toastShow("No Response", RaiseComplaintActivity.this);
 //                fillListDialog.dismiss();
-            }else if (flag == 5){
+            } else if (flag == 5) {
                 ScanckBar();
                 btn_submit.setEnabled(false);
             }
@@ -819,7 +819,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                flag =5;
+                flag = 5;
             }
             return null;
         }
@@ -838,7 +838,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     machineSerialName = new ArrayList<String>();
                     machineSerialName.add(0, "Select");
                     for (int i = 0; i < jsonArray2.length(); i++) {
-                        count +=1;
+                        count += 1;
                         JSONObject jsonObject2 = jsonArray2.getJSONObject(i);
                         String SaleID = jsonObject2.getString("SaleID");
                         String ModelName = jsonObject2.getString("ModelName");
@@ -851,7 +851,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_machine_serial.setAdapter(spinneradapter);
 
-                    if(count == 1){
+                    if (count == 1) {
                         spinner_machine_serial.setSelection(1);
                     }
 
@@ -864,7 +864,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             } else if (flag == 3) {
                 Config_Customer.toastShow("No Response", RaiseComplaintActivity.this);
 //                fillListDialog.dismiss();
-            }else if (flag == 5){
+            } else if (flag == 5) {
                 ScanckBar();
                 btn_submit.setEnabled(false);
             }
@@ -937,7 +937,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                flag =5;
+                flag = 5;
             }
             return null;
         }
@@ -961,7 +961,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     Intent i = new Intent(RaiseComplaintActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();
-                }else if (flag == 5){
+                } else if (flag == 5) {
 
                     ScanckBar();
                     btn_submit.setEnabled(false);
