@@ -16,7 +16,7 @@ public class MachinesDataModel {
     String SerialNo;
     String PrincipleName;
     String ModelName;
-    String CustomerName;
+    String ParentCustomerName;
     String TransactionTypeName;
     String Counter;
     String Plant;
@@ -24,7 +24,7 @@ public class MachinesDataModel {
     public MachinesDataModel(String SaleID, String DateOfInstallationText,
                              String WarrantyStartDateText, String WarrantyEndDateText, String AMCStartDateText,
                              String AMCEndDateText, String DateOfSupplyText, String SerialNo, String PrincipleName, String ModelName,
-                             String CustomerName, String TransactionTypeName, String Counter, String Plant) {
+                             String ParentCustomerName, String TransactionTypeName, String Counter, String Plant) {
         this.SaleID = SaleID;
         this.DateOfInstallationText = DateOfInstallationText;
         this.WarrantyStartDateText = WarrantyStartDateText;
@@ -35,7 +35,7 @@ public class MachinesDataModel {
         this.SerialNo = SerialNo;
         this.PrincipleName = PrincipleName;
         this.ModelName = ModelName;
-        this.CustomerName = CustomerName;
+        this.ParentCustomerName = ParentCustomerName;
         this.TransactionTypeName = TransactionTypeName;
         this.Counter = Counter;
         this.Plant = Plant;
@@ -130,12 +130,12 @@ public class MachinesDataModel {
         ModelName = modelName;
     }
 
-    public String getCustomerName() {
-        return CustomerName;
+    public String getParentCustomerName() {
+        return ParentCustomerName;
     }
 
-    public void setCustomerName(String customerName) {
-        CustomerName = customerName;
+    public void setParentCustomerName(String parentCustomerName) {
+        ParentCustomerName = parentCustomerName;
     }
 
     public String getTransactionTypeName() {

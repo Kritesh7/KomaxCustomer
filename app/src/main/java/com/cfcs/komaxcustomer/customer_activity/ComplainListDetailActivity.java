@@ -244,7 +244,7 @@ public class ComplainListDetailActivity extends AppCompatActivity {
                     String PlantName = jsonObject.getString("SiteAddress").toString();
                     txt_plant.setText(PlantName);
 
-                    String CustomerName = jsonObject.getString("CustomerName").toString();
+                    String CustomerName = jsonObject.getString("ParentCustomerName").toString();
                     txt_customer_name.setText(CustomerName);
 
                     String ProblemTitle = jsonObject.getString("ComplaintTitle").toString();
@@ -489,6 +489,11 @@ public class ComplainListDetailActivity extends AppCompatActivity {
                 Config_Customer.logout(ComplainListDetailActivity.this);
                 finish();
                 Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
+                return (true);
+
+            case R.id.download_file:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
+                startActivity(browserIntent);
                 return (true);
 
         }

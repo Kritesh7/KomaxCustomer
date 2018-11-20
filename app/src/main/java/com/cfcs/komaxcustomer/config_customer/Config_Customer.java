@@ -19,8 +19,9 @@ import com.cfcs.komaxcustomer.LoginActivity;
 
 public class Config_Customer {
 
-//    public static String BASE_URL = "http://192.168.1.200:8080/";
+
     public static String BASE_URL = "https://app.komaxindia.co.in/";
+
     public static boolean internetStatus = false;
 
     public static void putSharedPreferences(Context context, String preferences, String key, String value) {
@@ -83,7 +84,7 @@ public class Config_Customer {
     public static void logout(Context c) {
 
         Config_Customer.putSharedPreferences(c, "pref_Customer", "AuthCode", "");
-      //  Config_Customer.putSharedPreferences(c, "pref_Customer", "ContactPersonId", "");
+        //  Config_Customer.putSharedPreferences(c, "pref_Customer", "ContactPersonId", "");
         Intent intent = new Intent(c, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         c.startActivity(intent);

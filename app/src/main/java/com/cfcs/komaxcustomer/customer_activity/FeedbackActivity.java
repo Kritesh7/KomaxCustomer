@@ -601,6 +601,11 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
                 return (true);
 
+            case R.id.download_file:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
+                startActivity(browserIntent);
+                return (true);
+
         }
         return (super.onOptionsItemSelected(item));
     }

@@ -296,7 +296,7 @@ public class ComplaintsActivity extends AppCompatActivity {
 
     private void showSearchPopByFab() {
 
-        final EditText txt_complaint_date_from, txt_complaint_date_to;
+        final TextView txt_complaint_date_from, txt_complaint_date_to;
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -1295,6 +1295,11 @@ public class ComplaintsActivity extends AppCompatActivity {
                 Config_Customer.logout(ComplaintsActivity.this);
                 finish();
                 Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
+                return (true);
+
+            case R.id.download_file:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
+                startActivity(browserIntent);
                 return (true);
 
         }

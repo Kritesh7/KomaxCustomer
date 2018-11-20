@@ -102,7 +102,7 @@ public class MachinesActivity extends AppCompatActivity {
     String[] SerialNo;
     String[] PrincipleName;
     String[] ModelName;
-    String[] CustomerName;
+    String[] ParentCustomerName;
     String[] TransactionTypeName;
     String[] Plant;
 
@@ -699,7 +699,7 @@ public class MachinesActivity extends AppCompatActivity {
                         SerialNo = new String[jsonArray.length()];
                         PrincipleName = new String[jsonArray.length()];
                         ModelName = new String[jsonArray.length()];
-                        CustomerName = new String[jsonArray.length()];
+                        ParentCustomerName = new String[jsonArray.length()];
                         TransactionTypeName = new String[jsonArray.length()];
                         Plant = new String[jsonArray.length()];
 
@@ -715,7 +715,7 @@ public class MachinesActivity extends AppCompatActivity {
                                 machinesDataModel.setSerialNo(jsonObject1.getString("SerialNo").toString());
                                 machinesDataModel.setPrincipleName(jsonObject1.getString("PrincipleName").toString());
                                 machinesDataModel.setModelName(jsonObject1.getString("ModelName").toString());
-                                machinesDataModel.setCustomerName(jsonObject1.getString("CustomerName").toString());
+                                machinesDataModel.setParentCustomerName(jsonObject1.getString("ParentCustomerName").toString());
                                 machinesDataModel.setTransactionTypeName(jsonObject1.getString("TransactionTypeName").toString());
                                 machinesDataModel.setWarrantyStartDateText(jsonObject1
                                         .getString("WarrantyStartDateText")
@@ -902,6 +902,11 @@ public class MachinesActivity extends AppCompatActivity {
                 Config_Customer.logout(MachinesActivity.this);
                 finish();
                 Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
+                return (true);
+
+            case R.id.download_file:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
+                startActivity(browserIntent);
                 return (true);
 
         }

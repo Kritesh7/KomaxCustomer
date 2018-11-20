@@ -45,6 +45,11 @@
                 android:title="FeedBack"
                 app:showAsAction="never"></item>
             <item
+                android:id="@+id/download_file"
+                android:icon="@drawable/ic_info"
+                android:title="User Manual"
+                app:showAsAction="never"></item>
+            <item
                 android:id="@+id/profile"
                 android:icon="@drawable/ic_profile_menu"
                 android:title="Profile"

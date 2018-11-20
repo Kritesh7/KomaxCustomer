@@ -97,7 +97,6 @@ public class ProfileActivity extends AppCompatActivity {
         txt_country_code = findViewById(R.id.txt_country_code);
         txt_other_contacts = findViewById(R.id.txt_other_contacts);
         btn_update = findViewById(R.id.btn_update);
-
         maincontainer = findViewById(R.id.maincontainer);
 
         Config_Customer.isOnline(ProfileActivity.this);
@@ -549,6 +548,11 @@ public class ProfileActivity extends AppCompatActivity {
                 Config_Customer.logout(ProfileActivity.this);
                 finish();
                 Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
+                return (true);
+
+            case R.id.download_file:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
+                startActivity(browserIntent);
                 return (true);
 
         }

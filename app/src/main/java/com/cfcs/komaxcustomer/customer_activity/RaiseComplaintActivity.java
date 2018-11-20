@@ -103,7 +103,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
     List<String> spinnerlist1;
 
 
-    EditText txt_complaint_date, txt_complaint_time, txt_problem_description, txt_problem_title, txt_other_contacts;
+    EditText txt_complaint_time, txt_problem_description, txt_problem_title, txt_other_contacts;
     Calendar myCalendar;
     Button btn_submit, btn_clear;
 
@@ -114,7 +114,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
 
     LinearLayout maincontainer;
 
-    TextView tv_request_title, tv_problem_date, tv_plant, tv_machine_serial, tv_machine_model;
+    TextView tv_request_title, tv_problem_date, tv_plant, tv_machine_serial, tv_machine_model,txt_complaint_date;
 
 
     @Override
@@ -265,7 +265,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         });
 
 
-        txt_complaint_date = (EditText) findViewById(R.id.txt_complaint_date);
+//        txt_complaint_date = (TextView) findViewById(R.id.txt_complaint_date);
 
         txt_complaint_date.setOnClickListener(new View.OnClickListener() {
 
@@ -1064,6 +1064,11 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 Config_Customer.logout(RaiseComplaintActivity.this);
                 finish();
                 Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
+                return (true);
+
+            case R.id.download_file:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
+                startActivity(browserIntent);
                 return (true);
 
         }

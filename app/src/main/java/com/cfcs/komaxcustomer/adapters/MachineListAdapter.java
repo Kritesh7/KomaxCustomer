@@ -84,7 +84,7 @@ public class MachineListAdapter extends BaseAdapter {
         mViewHolder.txt_plant.setText(" "
                 + currentListData.getPlant());
         mViewHolder.txt_customer.setText(" "
-                + currentListData.getCustomerName());
+                + currentListData.getParentCustomerName());
         mViewHolder.txt_model.setText(" "
                 + currentListData.getModelName());
         mViewHolder.txt_type.setText(" "

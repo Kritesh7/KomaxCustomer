@@ -38,7 +38,7 @@
                         android:singleLine="false"
                         android:text="@string/call_us"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16dp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -48,7 +48,8 @@
                         android:layout_marginBottom="33dp"
                         android:elevation="2dp"
                         android:padding="10dp"
-                        app:srcCompat="@drawable/ic_call_us1" />
+                        app:srcCompat="@drawable/ic_call_us1"
+                        android:layout_alignParentLeft="true" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -69,7 +70,7 @@
                         android:singleLine="false"
                         android:text="@string/arrange_call"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16dp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -105,7 +106,7 @@
                         android:paddingBottom="10dp"
                         android:text="Raise Request"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16dp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -135,7 +136,7 @@
                         android:paddingBottom="10dp"
                         android:text="Service Request"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16dp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -171,7 +172,7 @@
                         android:paddingBottom="10dp"
                         android:text="@string/machines"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16dp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -181,7 +182,8 @@
                         android:layout_marginBottom="33dp"
                         android:elevation="2dp"
                         android:padding="10dp"
-                        app:srcCompat="@drawable/ic_machine" />
+                        app:srcCompat="@drawable/ic_machine"
+                        android:layout_alignParentLeft="true" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -201,7 +203,7 @@
                         android:paddingBottom="10dp"
                         android:text="@string/feedback"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16dp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -212,11 +214,9 @@
                         android:elevation="2dp"
                         android:padding="10dp"
                         app:srcCompat="@drawable/ic_feedback" />
-                    <!--app:srcCompat="@drawable/ic_light_bulb"-->
 
                 </RelativeLayout>
             </TableRow>
-
 
         </TableLayout>
 

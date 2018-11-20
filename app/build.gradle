@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'KomaxCustomer'
             keyPassword '@cfCs#420QJ'
-            storeFile file('D:/Android Software/KeyStore/KomacCustomer/KomaxCustomer.jks')
+            storeFile file('D:/Android KeyStore/KeyStore/KomacCustomer/KomaxCustomer.jks')
             storePassword 'Cfcs@502#89kJ'
         }
     }
@@ -14,8 +14,8 @@ android {
         applicationId "com.cfcs.komaxcustomer"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.5"
+        versionCode 6
+        versionName "1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
