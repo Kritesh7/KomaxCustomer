@@ -60,6 +60,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -98,9 +99,11 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_feedback);
 
         //Set Company logo in action bar with AppCompatActivity
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+        }
 
         tv_subject = findViewById(R.id.tv_subject);
         tv_refrence = findViewById(R.id.tv_refrence);

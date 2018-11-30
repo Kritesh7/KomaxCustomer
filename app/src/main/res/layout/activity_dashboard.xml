@@ -40,7 +40,7 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/btn_call_us"
@@ -72,7 +72,7 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/btn_arrange_call"
@@ -108,7 +108,7 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
@@ -134,11 +134,11 @@
                         android:background="#07774E"
                         android:gravity="center|bottom"
                         android:paddingBottom="10dp"
-                        android:text="Service Request"
+                        android:text="Manage Request"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/btn_complaint"
@@ -174,7 +174,7 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
@@ -205,7 +205,7 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"

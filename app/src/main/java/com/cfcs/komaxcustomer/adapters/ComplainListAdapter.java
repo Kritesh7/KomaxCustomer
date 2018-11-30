@@ -15,12 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
+
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cfcs.komaxcustomer.R;
 import com.cfcs.komaxcustomer.background_task.UpdateEscalation;
@@ -40,16 +39,13 @@ import java.util.ArrayList;
 
 public class ComplainListAdapter extends BaseAdapter {
 
-    ArrayList<ComplainListDataModel> ComplainList = new ArrayList<ComplainListDataModel>();
-    ArrayList<EscalationDataModel> EscaltionList = new ArrayList<EscalationDataModel>();
-    LayoutInflater inflater;
-    Context context;
+    private ArrayList<ComplainListDataModel> ComplainList;
+    private ArrayList<EscalationDataModel> EscaltionList;
+    private LayoutInflater inflater;
+    private Context context;
     private int i;
 
-    String Status = "";
-
-    RadioButton radio;
-    RadioGroup.LayoutParams params;
+    private String Status;
 
 
     public ComplainListAdapter(Context context, ArrayList<ComplainListDataModel> complainList, ArrayList<EscalationDataModel> EscaltionList, String Status) {
@@ -96,7 +92,6 @@ public class ComplainListAdapter extends BaseAdapter {
     public View getView(final int position, View view, final ViewGroup viewGroup) {
         final MyViewHolder mViewHolder;
 
-
         final ComplainListDataModel currentListData = getItem(position);
 
         String Escalationid = currentListData.getEscalationID();
@@ -107,9 +102,8 @@ public class ComplainListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.complain_list_layout,
                     viewGroup, false);
             mViewHolder = new MyViewHolder(view);
-            //final RadioButton[] radio = new RadioButton[EscalationArrayList.size()];
 
-            params = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.WRAP_CONTENT);
+            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.WRAP_CONTENT);
             final AlertDialog.Builder altDialog;
             altDialog = new AlertDialog.Builder(context);
             altDialog.setMessage("Do you want to update Escalation level ?");
@@ -117,7 +111,7 @@ public class ComplainListAdapter extends BaseAdapter {
             Log.e("ID ccno", "ccno " + cc);
             for (i = 0; i < EscaltionList.size(); i++) {
                 Log.e("ID id", "elistid " + EscaltionList.get(i).getEscalationID());
-                radio = new RadioButton(context);
+                RadioButton radio = new RadioButton(context);
                 radio.setText(EscaltionList.get(i).getEscalationShortCode());
                 int textColor = Color.parseColor("#0000ff");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -126,13 +120,11 @@ public class ComplainListAdapter extends BaseAdapter {
                 radio.setTextColor(Color.BLACK);
                 radio.setTextSize(12);
 
-                //RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.WRAP_CONTENT);
                 params.weight = 1.0f;
                 params.setMargins(15, 5, 5, 15);
                 mViewHolder.radioGroup.addView(radio, params);
 
                 if (Escalationid.compareTo(EscaltionList.get(i).getEscalationID()) == 0) {
-                    //rb.setChecked(true);
                     radio.setChecked(true);
                 }
 
@@ -147,14 +139,13 @@ public class ComplainListAdapter extends BaseAdapter {
                             public void onClick(DialogInterface dialog, int which) {
                                 // TODO Auto-generated method stub
                                 int selectedRadioButtonID = mViewHolder.radioGroup.getCheckedRadioButtonId();
-                                RadioButton selectedRadioButton = (RadioButton) viewGroup.findViewById(selectedRadioButtonID);
+                                RadioButton selectedRadioButton = viewGroup.findViewById(selectedRadioButtonID);
                                 final String selectedRadioButtonText = selectedRadioButton.getText().toString();
                                 Log.e("selectedRadioButtonText", " cfcs " + selectedRadioButtonText);
 
                                 String ContactPersonId = Config_Customer.getSharedPreferences(context, "pref_Customer", "ContactPersonId", "");
                                 String ComplainNo = currentListData.getComplainNo();
                                 String AuthCode = Config_Customer.getSharedPreferences(context, "pref_Customer", "AuthCode", "");
-//                                String status = currentListData.getStatus();
                                 String newEscalationID = "";
                                 for (int i = 0; i < EscaltionList.size(); i++) {
                                     if (EscaltionList.get(i).getEscalationShortCode().compareTo(selectedRadioButtonText) == 0) {
@@ -174,7 +165,7 @@ public class ComplainListAdapter extends BaseAdapter {
                             public void onClick(DialogInterface dialog, int which) {
                                 // TODO Auto-generated method stub
                                 Intent intent = new Intent(context, ComplaintsActivity.class);
-//                                intent.putExtra("status", currentListData.getStatus());
+                                //                               intent.putExtra("status", currentListData.getStatus());
                                 context.startActivity(intent);
                             }
                         });
@@ -203,7 +194,6 @@ public class ComplainListAdapter extends BaseAdapter {
             mViewHolder.radioGroup.setVisibility(View.VISIBLE);
         }
 
-
         mViewHolder.txt_complaint_title.setText(currentListData.getComplaintTitle());
         mViewHolder.txt_complain_no.setText(currentListData.getComplainNo());
         mViewHolder.txt_complain_date.setText(currentListData.getComplainTimeText());
@@ -214,8 +204,6 @@ public class ComplainListAdapter extends BaseAdapter {
         mViewHolder.txt_plant_name.setText(currentListData.getSiteAddress());
         mViewHolder.txt_status.setText(currentListData.getStatusText());
         mViewHolder.txt_level.setText(currentListData.getEscalationName());
-
-        //holder.radiogroup.setText(complainListDataModel.get());
 
         mViewHolder.card_view_linear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +227,7 @@ public class ComplainListAdapter extends BaseAdapter {
                 intent.putExtra("ComplainNo", currentListData.getComplainNo());
                 intent.putExtra("ModelName", currentListData.getModelName());
                 intent.putExtra("EnginerName", currentListData.getEngineerName());
-                intent.putExtra("status", Status);
+                intent.putExtra("status", "");
                 context.startActivity(intent);
             }
         });
@@ -254,10 +242,8 @@ public class ComplainListAdapter extends BaseAdapter {
         RadioGroup radioGroup;
         CardView card_view;
         LinearLayout card_view_linear, linearLayoutfeedback;
-        ImageView image_report, image_feedback;
 
-        //Button btnDetail;
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             card_view = view.findViewById(R.id.card_view);
             card_view_linear = view.findViewById(R.id.card_view_linear);
             txt_complaint_title = view.findViewById(R.id.txt_complaint_title);
@@ -272,8 +258,6 @@ public class ComplainListAdapter extends BaseAdapter {
             txt_level = view.findViewById(R.id.txt_level);
             radioGroup = view.findViewById(R.id.radioGroup);
             linearLayoutfeedback = view.findViewById(R.id.linearLayoutfeedback);
-//          image_report = view.findViewById(R.id.image_report);
-//          image_feedback = view.findViewById(R.id.image_feedback);
 
         }
     }

@@ -39,7 +39,6 @@ public class LoginActivity extends Activity {
     TextView forgotPassword;
     RelativeLayout maincontainer;
 
-
     String userName, userPass, AuthCode, ClientName, ClientVersion;
 
     ProgressDialog progressDialog;
@@ -49,7 +48,6 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         //initialize widgets
         txt_user_name = findViewById(R.id.txt_user_name);

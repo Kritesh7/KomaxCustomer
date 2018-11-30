@@ -3,13 +3,14 @@
 
     <string name="customerLogin">Customer Login</string>
     <string name="userName">User Name</string>
-    <string name="forgotPassword">Forget the password?</string>
+    <string name="forgotPassword">Forgot password?</string>
 
 
     <string name="youAreNotUpdatedTitle">Update Available</string>
     <string name="youAreNotUpdatedMessage">A new version of Komax Customer is available. Please update to version\s</string>
     <string name="youAreNotUpdatedMessage1">\ now</string>
     <string name="update1">Update</string>
+    <string name="notification">Notification</string>
 
     <!-- Complain Detail Activity -->
     <string name="HintEngg">Select Engineer</string>

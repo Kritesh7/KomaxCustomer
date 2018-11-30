@@ -51,6 +51,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Stack;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -85,9 +86,11 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         //Set Company logo in action bar with AppCompatActivity
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+        }
 
 
         try {

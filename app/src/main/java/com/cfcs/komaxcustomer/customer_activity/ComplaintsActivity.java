@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -60,6 +61,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ComplaintsActivity extends AppCompatActivity {
 
@@ -153,6 +155,8 @@ public class ComplaintsActivity extends AppCompatActivity {
 
     AlertDialog dialog;
 
+    Boolean checkViewCountType = true;
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,9 +165,11 @@ public class ComplaintsActivity extends AppCompatActivity {
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         //Set Company logo in action bar with AppCompatActivity
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+        }
 
 
         Config_Customer.getSharedPreferenceRemove(ComplaintsActivity.this, "pref_Customer", "PlantNametest");
@@ -182,10 +188,9 @@ public class ComplaintsActivity extends AppCompatActivity {
         list = (ListView) findViewById(R.id.list_view_complain);
         maincontainer = findViewById(R.id.maincontainer);
 
-        status = "1";
-
         Config_Customer.isOnline(ComplaintsActivity.this);
         if (Config_Customer.internetStatus == true) {
+
 
             new ComplainListAsy(status).execute();
             new EscalationLevelAsync().execute();
@@ -782,16 +787,19 @@ public class ComplaintsActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 list.setAdapter(null);
 
+                checkViewCountType = false;
+
             } else {
                 if (flag == 2) {
-                    list.setAdapter(new ComplainListAdapter(ComplaintsActivity.this, complainList, escalationList, status));
+           //         list.setAdapter(new ComplainListAdapter(ComplaintsActivity.this, complainList, escalationList, status));
+                    checkViewCountType = true;
                 } else {
                     if (flag == 3) {
                         Config_Customer.toastShow("No Response", ComplaintsActivity.this);
                         progressDialog.dismiss();
+                        checkViewCountType = false;
                     } else {
                         if (flag == 4) {
-
                             Config_Customer.toastShow(msgstatus, ComplaintsActivity.this);
                             Intent i = new Intent(ComplaintsActivity.this, LoginActivity.class);
                             startActivity(i);
@@ -801,6 +809,7 @@ public class ComplaintsActivity extends AppCompatActivity {
                             ScanckBar();
                             progressDialog.dismiss();
                             list.setAdapter(null);
+                            checkViewCountType = false;
 
                         }
 
@@ -917,6 +926,11 @@ public class ComplaintsActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (flag == 2) {
+                if(checkViewCountType){
+                    list.setAdapter(new ComplainListAdapter(ComplaintsActivity.this, complainList, escalationList, status));
+                }else {
+                    list.setAdapter(null);
+                }
 
             } else if (flag == 5) {
                 ScanckBar();
@@ -1203,7 +1217,6 @@ public class ComplaintsActivity extends AppCompatActivity {
         if (isFABOpen) {
             closeFABMenu();
         } else {
-
             Intent intent = new Intent(ComplaintsActivity.this, DashboardActivity.class);
             startActivity(intent);
             finish();

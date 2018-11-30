@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MachinesDetailActivity extends AppCompatActivity {
 
@@ -60,9 +62,11 @@ public class MachinesDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_machines_detail);
 
         //Set Company logo in action bar with AppCompatActivity
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_logo);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+        }
 
 
         txt_customer = (TextView)

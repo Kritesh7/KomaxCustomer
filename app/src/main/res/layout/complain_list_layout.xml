@@ -372,11 +372,12 @@
 
                 <TextView
                     android:id="@+id/txt_level"
-
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_weight="5.5"
                     android:text="" />
+
+
             </LinearLayout>
 
 
