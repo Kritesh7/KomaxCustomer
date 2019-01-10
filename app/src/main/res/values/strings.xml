@@ -49,10 +49,10 @@
     <string name="feedback">Feedback</string>
     <string name="complaint_no">Complaint No</string>
     <string name="resolved_by">Resolved By</string>
-    <string name="punctuality">Punctuality</string>
+    <string name="punctuality">Punctuality of service engineer</string>
     <string name="technician_capability">Technician Capability</string>
-    <string name="customer_centricity">Customer Centricity</string>
-    <string name="overall_experience">Overall Experience</string>
+    <string name="customer_centricity">Behaviour and Communications</string>
+    <string name="overall_experience">Overall Experience / satisfaction</string>
     <string name="remark">Remark</string>
     <string name="write_your_remark">Write your Remark</string>
     <string name="complaint_detail">Complaint Detail</string>
@@ -145,5 +145,15 @@
     <string name="w_a_end_date">W/A End Date</string>
     <string name="complaintss">Complaints:-</string>
     <string name="problem_occurred_at">Problem Occurred At</string>
+    <string name="over_all_response_time">Over All Response Time</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="service_report">Service Report</string>
+    <string name="service_report_detail">Service Report Detail</string>
 
 </resources>

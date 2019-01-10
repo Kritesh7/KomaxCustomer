@@ -1,6 +1,7 @@
 package com.cfcs.komaxcustomer.customer_activity;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,13 +15,17 @@ import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -28,6 +33,7 @@ import android.widget.TextView;
 import com.cfcs.komaxcustomer.LoginActivity;
 import com.cfcs.komaxcustomer.R;
 import com.cfcs.komaxcustomer.config_customer.Config_Customer;
+import com.cfcs.komaxcustomer.utils.IStringConstant;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,9 +42,11 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
-public class ComplainFeedbackActivity extends AppCompatActivity {
+public class ComplainFeedbackActivity extends AppCompatActivity implements IStringConstant, PopupMenu.OnMenuItemClickListener {
 
     private static String SOAP_ACTION1 = "http://cfcs.co.in/AppFeedbackInsUpdt";
     private static String NAMESPACE = "http://cfcs.co.in/";
@@ -46,31 +54,85 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
     private static String URL = Config_Customer.BASE_URL + "Customer/webapi/customerwebservice.asmx?";
 
 
-    RatingBar rbPunctuality, rbTechnicianCapability, rbCustomerCentricity, rbOverAllExperience;
+    RatingBar rbOverAllresponseTime,rbPunctuality, rbTechnicianCapability, rbCustomerCentricity, rbOverAllExperience;
     Button btnSubmit, buttonHome, buttonBack;
     TextView tvComplainNo, complainTitle, tvSeriolNo, engNameTxt;
     EditText etRemark;
     String remark = "", ComplainNo = "", ModelNo = "", ComplainTitle = "", status = "", engName = "";
 
     ProgressBar progressBarMsg;
-    float PunctualityRating = 0.0f, TechnicianCapabilityRating = 0.0f, CustomerCentricityRating = 0.0f, OverAllExperienceRating = 0.0f;
+    float ResponseTimeRating = 0.0f,PunctualityRating = 0.0f, TechnicianCapabilityRating = 0.0f, CustomerCentricityRating = 0.0f, OverAllExperienceRating = 0.0f;
     ImageButton ibMenu;
     Context context = ComplainFeedbackActivity.this;
 
     LinearLayout maincontainer;
 
+    View view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complain_feedback);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
-            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.custom_action_item_layout);
+            view =Objects.requireNonNull(getSupportActionBar()).getCustomView();
         }
 
+
+        AppCompatImageView menu_action_bar = view.findViewById(R.id.menu_action_bar);
+
+        TextView cart_badge = view.findViewById(R.id.cart_badge);
+
+        AppCompatImageView cart_image = view.findViewById(R.id.cart_image);
+
+        String ComplaintCount = Config_Customer.getSharedPreferences(ComplainFeedbackActivity.this, "pref_Customer", "ComplaintCount", "");
+        cart_badge.setText(ComplaintCount);
+
+        menu_action_bar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu popupMenu = new PopupMenu(ComplainFeedbackActivity.this, v);
+                try {
+                    Field[] fields = popupMenu.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        if ("mPopup".equals(field.getName())) {
+                            field.setAccessible(true);
+                            Object menuPopupHelper = field.get(popupMenu);
+                            Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                            Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                            setForceIcons.invoke(menuPopupHelper, true);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                popupMenu.setOnMenuItemClickListener(ComplainFeedbackActivity.this);
+                popupMenu.inflate(R.menu.menu_main);
+                popupMenu.show();
+
+            }
+        });
+
+        cart_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ComplainFeedbackActivity.this,ComplaintsActivity.class);
+                startActivity(i);
+            }
+        });
+
         maincontainer = findViewById(R.id.maincontainer);
+
+        rbOverAllresponseTime = (RatingBar) findViewById(R.id.rbOverAllresponseTime);
+        LayerDrawable OverAllresponseTimeStars = (LayerDrawable) rbOverAllresponseTime.getProgressDrawable();
+        OverAllresponseTimeStars.getDrawable(2).setColorFilter(Color.parseColor("#CFB53B"), PorterDuff.Mode.SRC_ATOP);
+        OverAllresponseTimeStars.getDrawable(0).setColorFilter(Color.parseColor("#808080"), PorterDuff.Mode.SRC_ATOP);
+        OverAllresponseTimeStars.getDrawable(1).setColorFilter(Color.parseColor("#808080"), PorterDuff.Mode.SRC_ATOP);
 
         rbPunctuality = (RatingBar) findViewById(R.id.rbPunctuality);
         LayerDrawable TimeLineStars = (LayerDrawable) rbPunctuality.getProgressDrawable();
@@ -111,10 +173,11 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
         engNameTxt.setText(engName);
 
 
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ResponseTimeRating = rbOverAllresponseTime.getRating();
                 PunctualityRating = rbPunctuality.getRating();
                 TechnicianCapabilityRating = rbTechnicianCapability.getRating();
                 CustomerCentricityRating = rbCustomerCentricity.getRating();
@@ -124,12 +187,12 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
                 Config_Customer.isOnline(ComplainFeedbackActivity.this);
                 if (Config_Customer.internetStatus == true) {
 
-                    if (PunctualityRating == 0.0 || TechnicianCapabilityRating == 0.0 || CustomerCentricityRating == 0.0 || OverAllExperienceRating == 0.0) {
+                    if (ResponseTimeRating == 0.0 || PunctualityRating == 0.0 || TechnicianCapabilityRating == 0.0 || CustomerCentricityRating == 0.0 || OverAllExperienceRating == 0.0) {
                         Config_Customer.alertBox("Please rate all field !! ", context);
                     } else {
 
-                        if (PunctualityRating >= 3.0 && TechnicianCapabilityRating >= 3.0 && CustomerCentricityRating >= 3.0 && OverAllExperienceRating >= 3.0) {
-                            String feedbackValue[] = {ComplainNo, "" + PunctualityRating, "" + TechnicianCapabilityRating,
+                        if (ResponseTimeRating >= 3.0 && PunctualityRating >= 3.0 && TechnicianCapabilityRating >= 3.0 && CustomerCentricityRating >= 3.0 && OverAllExperienceRating >= 3.0) {
+                            String feedbackValue[] = {ComplainNo,"" + ResponseTimeRating, "" + PunctualityRating, "" + TechnicianCapabilityRating,
                                     "" + CustomerCentricityRating, "" + OverAllExperienceRating, remark};
                             new ComplainFeedbackAsync(context).execute(feedbackValue);
 
@@ -137,7 +200,7 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
                             if (remark.compareTo("") == 0 || remark.isEmpty()) {
                                 Config_Customer.alertBox("Please write remark ", context);
                             } else {
-                                String feedbackValue[] = {ComplainNo, "" + PunctualityRating, "" + TechnicianCapabilityRating,
+                                String feedbackValue[] = {ComplainNo,"" + ResponseTimeRating, "" + PunctualityRating, "" + TechnicianCapabilityRating,
                                         "" + CustomerCentricityRating, "" + OverAllExperienceRating, remark};
                                 new ComplainFeedbackAsync(context).execute(feedbackValue);
                             }
@@ -145,7 +208,7 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", ComplainFeedbackActivity.this);
+                    Config_Customer.toastShow(NoInternetConnection, ComplainFeedbackActivity.this);
                 }
 
             }
@@ -153,16 +216,24 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
 
     }
 
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        Config_Customer.menuNavigation(ComplainFeedbackActivity.this,item);
+        return false;
+    }
+
     public class ComplainFeedbackAsync extends AsyncTask<String, String, String> {
 
 
-        String ContactPersonId = "", AuthCode = "", jsonValue = "", msgstatus, ComplainNo = "", PunctualityRating = "", TechnicianCapabilityRating = "", CustomerCentricityRating = "", OverAllExperienceRating = "", remark = "";
+        String ContactPersonId = "", AuthCode = "", jsonValue = "", msgstatus, ComplainNo = "",ResponseTimeRating = "", PunctualityRating = "", TechnicianCapabilityRating = "", CustomerCentricityRating = "", OverAllExperienceRating = "", remark = "";
         int flag;
         Context mContext;
         ProgressDialog progressDialog;
 
         String LoginStatus;
-        String invalid = "LoginFailed";
+
         String valid = "success";
 
         public ComplainFeedbackAsync(Context context) {
@@ -173,7 +244,6 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(mContext, "", "Please wait...", true, false, null);
-
             ContactPersonId = Config_Customer.getSharedPreferences(mContext, "pref_Customer", "ContactPersonId", "");
             AuthCode = Config_Customer.getSharedPreferences(mContext, "pref_Customer", "AuthCode", "");
         }
@@ -182,18 +252,20 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             ComplainNo = params[0];
-            PunctualityRating = params[1];
-            TechnicianCapabilityRating = params[2];
-            CustomerCentricityRating = params[3];
-            OverAllExperienceRating = params[4];
-            remark = params[5];
+            ResponseTimeRating = params[1];
+            PunctualityRating = params[2];
+            TechnicianCapabilityRating = params[3];
+            CustomerCentricityRating = params[4];
+            OverAllExperienceRating = params[5];
+            remark = params[6];
 
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME1);
             request.addProperty("ContactPersonId", ContactPersonId);
             request.addProperty("ComplainNo", ComplainNo);
+            request.addProperty("ResponseTime", "" + ResponseTimeRating);
             request.addProperty("Punctuality", "" + PunctualityRating);
             request.addProperty("TechnicianCapability", "" + TechnicianCapabilityRating);
-            request.addProperty("CustomerCentricity", "" + CustomerCentricityRating);
+            request.addProperty("BehaviourCommunication", "" + CustomerCentricityRating);
             request.addProperty("OverAllExperience", "" + OverAllExperienceRating);
             request.addProperty("Feedback", remark);
             request.addProperty("AuthCode", AuthCode);
@@ -293,97 +365,4 @@ public class ComplainFeedbackActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.dashboard:
-                Intent intent;
-                intent = new Intent(ComplainFeedbackActivity.this, DashboardActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_call_us_menu:
-                int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-                if (currentapiVersion <= 22) {
-                    String CompanyContactNo = Config_Customer.getSharedPreferences(ComplainFeedbackActivity.this, "pref_Customer", "CompanyContactNo", "");
-                    intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                    startActivity(intent);
-                } else {
-                    if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
-                    } else {
-                        String CompanyContactNo = Config_Customer.getSharedPreferences(ComplainFeedbackActivity.this, "pref_Customer", "CompanyContactNo", "");
-                        intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                        startActivity(intent);
-                    }
-                }
-                return (true);
-
-            case R.id.btn_arrange_call_menu:
-                intent = new Intent(ComplainFeedbackActivity.this, ArrangeCallActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_raise_complaint_menu:
-                intent = new Intent(ComplainFeedbackActivity.this, RaiseComplaintActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_complaint_menu:
-                intent = new Intent(ComplainFeedbackActivity.this, ComplaintsActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_machines_menu:
-                intent = new Intent(ComplainFeedbackActivity.this, MachinesActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_feedback_menu:
-                intent = new Intent(ComplainFeedbackActivity.this, FeedbackActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.profile:
-                intent = new Intent(ComplainFeedbackActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.change_password:
-
-                intent = new Intent(ComplainFeedbackActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.logout:
-
-                Config_Customer.logout(ComplainFeedbackActivity.this);
-                finish();
-                Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
-                return (true);
-
-            case R.id.download_file:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
-                startActivity(browserIntent);
-                return (true);
-
-        }
-        return (super.onOptionsItemSelected(item));
-    }
 }

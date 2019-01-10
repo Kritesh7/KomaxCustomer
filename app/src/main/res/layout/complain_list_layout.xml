@@ -418,25 +418,65 @@
 
 
             <LinearLayout
-                android:id="@+id/linearLayoutfeedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue">
+                android:orientation="horizontal">
 
-                <TextView
-
+                <LinearLayout
+                    android:id="@+id/linearLayoutfeedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:text="@string/feedback"
-                    android:textColor="@color/white"
-                    android:textSize="20sp">
+                    android:background="@color/blue"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp">
 
-                </TextView>
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="@string/feedback"
+                        android:textColor="@color/white"
+                        android:textSize="18sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutServiceReport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="@string/service_report"
+                        android:textColor="@color/white"
+                        android:textSize="18sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
+
+
+
 
 
         </LinearLayout>

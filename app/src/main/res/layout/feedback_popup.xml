@@ -43,9 +43,11 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:clickable="false"
                             android:orientation="vertical"
-                            android:padding="10dp">
+                            android:padding="10dp"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:clickable="true">
 
                             <!-- Complain No -->
 
@@ -184,6 +186,33 @@
                                 android:background="#e0e0e0"
                                 android:elevation=".5dp" />
 
+
+                            <!-- Over All Response Time -->
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_weight="1"
+                                android:text="@string/over_all_response_time"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <RatingBar
+                                android:id="@+id/rbOverAllresponseTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_weight="1"
+                                android:numStars="5"
+                                android:progressTint="#0044cc"
+                                android:scaleX="0.6"
+                                android:scaleY="0.6" />
+
+                            <!-- Punctuality of service engineer -->
+
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -227,7 +256,7 @@
                                 android:scaleY="0.6" />
 
 
-                            <!-- CustomerCentricity -->
+                            <!-- CustomerCentricity change to behaviour and communications -->
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -249,7 +278,7 @@
                                 android:scaleX="0.6"
                                 android:scaleY="0.6" />
 
-                            <!-- OverAllExperience -->
+                            <!-- OverAllExperience / satisfaction -->
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -297,7 +326,7 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="40dp"
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
@@ -313,7 +342,7 @@
                                     android:padding="8dp"
                                     android:text="@string/submit"
                                     android:textColor="@color/white"
-                                    android:textSize="18sp"
+                                    android:textSize="15sp"
                                     android:textStyle="bold" />
 
 
@@ -328,8 +357,9 @@
                                     android:padding="5dp"
                                     android:text="@string/cancel"
                                     android:textColor="@color/white"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="10dp" />
 
                             </LinearLayout>
                         </LinearLayout>

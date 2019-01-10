@@ -2,6 +2,7 @@ package com.cfcs.komaxcustomer.customer_activity;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -18,12 +19,16 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -31,10 +36,13 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cfcs.komaxcustomer.LoginActivity;
 import com.cfcs.komaxcustomer.R;
 import com.cfcs.komaxcustomer.broadcastReciever.AutoNofity;
 import com.cfcs.komaxcustomer.config_customer.Config_Customer;
@@ -43,6 +51,7 @@ import com.cfcs.komaxcustomer.models.PendingFeedbackDataModel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.jsoup.Jsoup;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -50,11 +59,17 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
 
-public class DashboardActivity extends AppCompatActivity {
+import static com.cfcs.komaxcustomer.utils.IStringConstant.NoInternetConnection;
+import static com.cfcs.komaxcustomer.utils.IStringConstant.invalid;
+import static java.security.AccessController.getContext;
+
+public class DashboardActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
     Button btn_arrange_call, btn_call_us, btn_raise_complaint, btn_complaint, btn_machines, btn_feedback;
 
@@ -72,12 +87,13 @@ public class DashboardActivity extends AppCompatActivity {
     View dialogView;
 
     Button btnSubmit, btnCancel;
-    RatingBar rbPunctuality, rbTechnicianCapability, rbCustomerCentricity, rbOverAllExperience;
+    RatingBar rbOverAllresponseTime,rbPunctuality, rbTechnicianCapability, rbCustomerCentricity, rbOverAllExperience;
     TextView tvComplainNo, complainTitle, tvSeriolNo;
     EditText etRemark;
 
     String currentVersion = null;
-
+    View view;
+    TextView cart_badge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +101,60 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
 
-        //Set Company logo in action bar with AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
-            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.custom_action_item_layout);
+            view =Objects.requireNonNull(getSupportActionBar()).getCustomView();
         }
+
+
+        AppCompatImageView menu_action_bar = view.findViewById(R.id.menu_action_bar);
+        cart_badge = view.findViewById(R.id.cart_badge);
+
+        AppCompatImageView cart_image = view.findViewById(R.id.cart_image);
+
+        menu_action_bar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu popupMenu = new PopupMenu(DashboardActivity.this, v);
+                try {
+                    Field[] fields = popupMenu.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        if ("mPopup".equals(field.getName())) {
+                            field.setAccessible(true);
+                            Object menuPopupHelper = field.get(popupMenu);
+                            Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                            Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                            setForceIcons.invoke(menuPopupHelper, true);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                popupMenu.setOnMenuItemClickListener(DashboardActivity.this);
+                popupMenu.inflate(R.menu.menu_main);
+                popupMenu.show();
+
+
+
+            }
+        });
+
+
+        cart_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DashboardActivity.this,ComplaintsActivity.class);
+                startActivity(i);
+            }
+        });
+
+
+
 
 
         try {
@@ -103,17 +167,18 @@ public class DashboardActivity extends AppCompatActivity {
         if (Config_Customer.internetStatus == true) {
 
             new ForceUpdateAsync(currentVersion).execute();
+            new PendingFeedbackAsync().execute();
 
         } else {
-            Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", DashboardActivity.this);
+            Config_Customer.toastShow(NoInternetConnection, DashboardActivity.this);
             finish();
         }
 
-
-        String PendingFeedBack = Config_Customer.getSharedPreferences(DashboardActivity.this, "pref_Customer", "PendingFeedback", "");
-        if (PendingFeedBack.compareTo("1") == 0) {
-            new PendingFeedbackAsync().execute();
-        }
+ //       new PendingFeedbackAsync().execute();
+//        String PendingFeedBack = Config_Customer.getSharedPreferences(DashboardActivity.this, "pref_Customer", "PendingFeedback", "1");
+//        if (PendingFeedBack.compareTo("1") == 0) {
+//            new PendingFeedbackAsync().execute();
+//        }
 
         btn_arrange_call = findViewById(R.id.btn_arrange_call);
         btn_call_us = findViewById(R.id.btn_call_us);
@@ -135,7 +200,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+                int currentapiVersion = Build.VERSION.SDK_INT;
                 if (currentapiVersion <= 22) {
                     String CompanyContactNo = Config_Customer.getSharedPreferences(DashboardActivity.this, "pref_Customer", "CompanyContactNo", "");
                     intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
@@ -192,103 +257,26 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onClick(View v) {
+
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.dashboard:
-                Intent intent;
-                intent = new Intent(DashboardActivity.this, DashboardActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_call_us_menu:
-                int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-                if (currentapiVersion <= 22) {
-                    String CompanyContactNo = Config_Customer.getSharedPreferences(DashboardActivity.this, "pref_Customer", "CompanyContactNo", "");
-                    intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                    startActivity(intent);
-                } else {
-                    if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
-                    } else {
-                        String CompanyContactNo = Config_Customer.getSharedPreferences(DashboardActivity.this, "pref_Customer", "CompanyContactNo", "");
-                        intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                        startActivity(intent);
-                    }
-                }
-
-                return (true);
-
-            case R.id.btn_arrange_call_menu:
-                intent = new Intent(DashboardActivity.this, ArrangeCallActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_raise_complaint_menu:
-                intent = new Intent(DashboardActivity.this, RaiseComplaintActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_complaint_menu:
-                intent = new Intent(DashboardActivity.this, ComplaintsActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_machines_menu:
-                intent = new Intent(DashboardActivity.this, MachinesActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_feedback_menu:
-                intent = new Intent(DashboardActivity.this, FeedbackActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.profile:
-                intent = new Intent(DashboardActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.change_password:
-
-                intent = new Intent(DashboardActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.logout:
-
-                Config_Customer.logout(DashboardActivity.this);
-                finish();
-                Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
-                return (true);
-
-            case R.id.download_file:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
-                startActivity(browserIntent);
-                return (true);
-
-        }
-        return (super.onOptionsItemSelected(item));
+    public boolean onMenuItemClick(MenuItem item) {
+        Config_Customer.menuNavigation(DashboardActivity.this, item);
+        return false;
     }
+
 
     public class PendingFeedbackAsync extends AsyncTask<String, String, String> {
 
         ProgressDialog progressDialog;
+
+        String FeedbackDetail = "",complaintCount = "";
+        int flag = 0;
+        String LoginStatus;
+        String msgstatus1;
+        String ComplainCount;
 
         @Override
         protected void onPreExecute() {
@@ -325,35 +313,72 @@ public class DashboardActivity extends AppCompatActivity {
                 if (result != null) {
                     feedBackList = result.getProperty(0).toString();
 
-                    JSONArray jsonArray = new JSONArray(feedBackList);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    Object json = new JSONTokener(feedBackList).nextValue();
+                    if (json instanceof JSONObject) {
+                        JSONObject object = new JSONObject(feedBackList);
+                        JSONArray complainDetailArray = object.getJSONArray("Feedback");
+                        FeedbackDetail = complainDetailArray.toString();
+                        JSONArray complaintCount = object.getJSONArray("ComplaintCount");
+                        JSONObject jsonObject = complaintCount.getJSONObject(0);
+                        ComplainCount = jsonObject.getString("OpenComplaint").toString();
+                      // txt_complain_no.setText(ComplainCount);
 
-                    if (jsonObject.has("MsgNotification")) {
-                        msgstatus = jsonObject.getString("MsgNotification");
-                        //flag = 1;
-                    } else {
-                        ComplainNo = new String[jsonArray.length()];
-                        MachineSerialNo = new String[jsonArray.length()];
-                        ComplaintTitle = new String[jsonArray.length()];
-                        // EngineerName = new String[jsonArray.length()];
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            try {
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                                PendingFeedbackDataModel pendingbean = new PendingFeedbackDataModel();
-                                pendingbean.setComplainNo(jsonObject1.getString("ComplainNo").toString());
-                                pendingbean.setSerialNo(jsonObject1.getString("MachineSerialNo").toString());
-                                pendingbean.setComplaintTitleName(jsonObject1.getString("ComplaintTitle").toString());
-                                pendingbean.setEngName(jsonObject1.getString("EngineerName"));
-                                // Add this object into the ArrayList myList
-                                feedValue.push(jsonObject1.getString("ComplainNo"));
-                                feedbackList.add(pendingbean);
-                                //flag = 2;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        if(FeedbackDetail.compareTo("[]") != 0){
+                            JSONArray jsonArray = new JSONArray(FeedbackDetail);
+                            ComplainNo = new String[jsonArray.length()];
+                            MachineSerialNo = new String[jsonArray.length()];
+                            ComplaintTitle = new String[jsonArray.length()];
+                            // EngineerName = new String[jsonArray.length()];
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                try {
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                    PendingFeedbackDataModel pendingbean = new PendingFeedbackDataModel();
+                                    pendingbean.setComplainNo(jsonObject1.getString("ComplainNo").toString());
+                                    pendingbean.setSerialNo(jsonObject1.getString("MachineSerialNo").toString());
+                                    pendingbean.setComplaintTitleName(jsonObject1.getString("ComplaintTitle").toString());
+                                    pendingbean.setEngName(jsonObject1.getString("EngineerName"));
+                                    // Add this object into the ArrayList myList
+                                    feedValue.push(jsonObject1.getString("ComplainNo"));
+                                    feedbackList.add(pendingbean);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }
+
+                        flag = 2;
+
+
+                    } else if (json instanceof JSONArray) {
+
+                        JSONArray jsonArray = new JSONArray(feedBackList);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        msgstatus1 = jsonObject.getString("MsgNotification");
+                        if (jsonObject.has("status")) {
+
+                            LoginStatus = jsonObject.getString("status");
+                            msgstatus1 = jsonObject.getString("MsgNotification");
+                            if (LoginStatus.equals(invalid)) {
+
+                                flag = 4;
+                            } else {
+
+                                flag = 1;
                             }
                         }
+
                     }
+
+                } else {
+                    JSONArray jsonArray = new JSONArray(feedBackList);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    msgstatus1 = jsonObject.getString("MsgNotification");
+                   flag = 3;
                 }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -365,10 +390,31 @@ public class DashboardActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            progressDialog.dismiss();
-            if (feedbackList.size() > 0) {
-                showFeedbackPopUp();
+            if(flag == 1){
+
+                Config_Customer.toastShow(msgstatus1,DashboardActivity.this);
+
+            }else if (flag == 2){
+
+                if (feedbackList.size() > 0) {
+                    showFeedbackPopUp();
+                }
+                cart_badge.setText(ComplainCount);
+                Config_Customer.putSharedPreferences(DashboardActivity.this, "pref_Customer", "ComplaintCount", ComplainCount);
+
+            }else if (flag == 3){
+
+                Config_Customer.toastShow(msgstatus1,DashboardActivity.this);
+            }else if(flag == 4){
+
+                Config_Customer.toastShow(msgstatus1, DashboardActivity.this);
+                Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
             }
+
+            progressDialog.dismiss();
+
         }
     }
 
@@ -392,12 +438,20 @@ public class DashboardActivity extends AppCompatActivity {
         myMsg.setBackgroundColor(Color.parseColor("#396999"));
         dialog.setCustomTitle(myMsg);
 
+
         dialog.setCanceledOnTouchOutside(false);
+
 
         TextView engName;
         btnSubmit = (Button) dialogView.findViewById(R.id.btnSubmit);
         btnCancel = (Button) dialogView.findViewById(R.id.btnCancel);
         engName = (TextView) dialogView.findViewById(R.id.eng_nametxt);
+
+        rbOverAllresponseTime = (RatingBar) dialogView.findViewById(R.id.rbOverAllresponseTime);
+        LayerDrawable OverAllresponseTimeStars = (LayerDrawable) rbOverAllresponseTime.getProgressDrawable();
+        OverAllresponseTimeStars.getDrawable(2).setColorFilter(Color.parseColor("#CFB53B"), PorterDuff.Mode.SRC_ATOP);
+        OverAllresponseTimeStars.getDrawable(0).setColorFilter(Color.parseColor("#808080"), PorterDuff.Mode.SRC_ATOP);
+        OverAllresponseTimeStars.getDrawable(1).setColorFilter(Color.parseColor("#808080"), PorterDuff.Mode.SRC_ATOP);
 
         rbPunctuality = (RatingBar) dialogView.findViewById(R.id.rbPunctuality);
         LayerDrawable PunctualityStars = (LayerDrawable) rbPunctuality.getProgressDrawable();
@@ -441,21 +495,22 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                float PunctualityRating = 0.0f, TechnicianCapabilityRating = 0.0f, CustomerCentricityRating = 0.0f, OverAllExperienceRating = 0.0f;
+                float ResponseTimeRating = 0.0f,PunctualityRating = 0.0f, TechnicianCapabilityRating = 0.0f, CustomerCentricityRating = 0.0f, OverAllExperienceRating = 0.0f;
 
                 String remark = "";
+                ResponseTimeRating = rbOverAllresponseTime.getRating();
                 PunctualityRating = rbPunctuality.getRating();
                 TechnicianCapabilityRating = rbTechnicianCapability.getRating();
                 CustomerCentricityRating = rbCustomerCentricity.getRating();
                 OverAllExperienceRating = rbOverAllExperience.getRating();
                 remark = etRemark.getText().toString();
 
-                if (PunctualityRating == 0.0 || TechnicianCapabilityRating == 0.0 || CustomerCentricityRating == 0.0 || OverAllExperienceRating == 0.0) {
+                if (ResponseTimeRating == 0.0 || PunctualityRating == 0.0 || TechnicianCapabilityRating == 0.0 || CustomerCentricityRating == 0.0 || OverAllExperienceRating == 0.0) {
                     Config_Customer.alertBox("Please rate all field !! ", DashboardActivity.this);
                 } else {
 
-                    if (PunctualityRating >= 3.0 && TechnicianCapabilityRating >= 3.0 && CustomerCentricityRating >= 3.0 && OverAllExperienceRating >= 3.0) {
-                        String feedbackValue[] = {feedbackList.get(0).getComplainNo(), "" + PunctualityRating, "" + TechnicianCapabilityRating,
+                    if (ResponseTimeRating >= 3.0 && PunctualityRating >= 3.0 && TechnicianCapabilityRating >= 3.0 && CustomerCentricityRating >= 3.0 && OverAllExperienceRating >= 3.0) {
+                        String feedbackValue[] = {feedbackList.get(0).getComplainNo(),"" + ResponseTimeRating, "" + PunctualityRating, "" + TechnicianCapabilityRating,
                                 "" + CustomerCentricityRating, "" + OverAllExperienceRating, remark};
                         new ComplainFeedAsync(DashboardActivity.this).execute(feedbackValue);
 
@@ -463,7 +518,7 @@ public class DashboardActivity extends AppCompatActivity {
                         if (remark.compareTo("") == 0 || remark.isEmpty()) {
                             Config_Customer.alertBox("Please write remark ", DashboardActivity.this);
                         } else {
-                            String feedbackValue[] = {feedbackList.get(0).getComplainNo(), "" + PunctualityRating, "" + TechnicianCapabilityRating,
+                            String feedbackValue[] = {feedbackList.get(0).getComplainNo(),"" + ResponseTimeRating, "" + PunctualityRating, "" + TechnicianCapabilityRating,
                                     "" + CustomerCentricityRating, "" + OverAllExperienceRating, remark};
                             new ComplainFeedAsync(DashboardActivity.this).execute(feedbackValue);
                         }
@@ -493,7 +548,7 @@ public class DashboardActivity extends AppCompatActivity {
         private String URL = Config_Customer.BASE_URL + "Customer/webapi/customerwebservice.asmx?";
 
 
-        String ContactPersonId = "", AuthCode = "", jsonValue = "", ComplainNo = "", PunctualityRating = "", TechnicianCapabilityRating = "", CustomerCentricityRating = "", OverAllExperienceRating = "", remark = "";
+        String ContactPersonId = "", AuthCode = "", jsonValue = "", ComplainNo = "",ResponseTimeRating = "", PunctualityRating = "", TechnicianCapabilityRating = "", CustomerCentricityRating = "", OverAllExperienceRating = "", remark = "";
         int flag;
         Context mContext;
         ProgressDialog progressDialog;
@@ -518,18 +573,20 @@ public class DashboardActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             ComplainNo = params[0];
-            PunctualityRating = params[1];
-            TechnicianCapabilityRating = params[2];
-            CustomerCentricityRating = params[3];
-            OverAllExperienceRating = params[4];
-            remark = params[5];
+            ResponseTimeRating = params[1];
+            PunctualityRating = params[2];
+            TechnicianCapabilityRating = params[3];
+            CustomerCentricityRating = params[4];
+            OverAllExperienceRating = params[5];
+            remark = params[6];
 
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME1);
             request.addProperty("ContactPersonId", ContactPersonId);
             request.addProperty("ComplainNo", ComplainNo);
+            request.addProperty("ResponseTime", "" + ResponseTimeRating);
             request.addProperty("Punctuality", "" + PunctualityRating);
             request.addProperty("TechnicianCapability", "" + TechnicianCapabilityRating);
-            request.addProperty("CustomerCentricity", "" + CustomerCentricityRating);
+            request.addProperty("BehaviourCommunication", "" + CustomerCentricityRating);
             request.addProperty("OverAllExperience", "" + OverAllExperienceRating);
             request.addProperty("Feedback", remark);
             request.addProperty("AuthCode", AuthCode);
@@ -573,7 +630,7 @@ public class DashboardActivity extends AppCompatActivity {
                 if (flag == 2) {
                     Config_Customer.toastShow(msgstatus, mContext);
 
-                    if (updtStatus == true) {
+                    if (updtStatus) {
                         //if (feedValue.size() > 0) {
                         if (feedbackList.size() > 0) {
                             dialog.setView(dialogView);

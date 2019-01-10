@@ -10,6 +10,7 @@ import com.cfcs.komaxcustomer.LoginActivity;
 import com.cfcs.komaxcustomer.config_customer.Config_Customer;
 import com.cfcs.komaxcustomer.customer_activity.ComplaintsActivity;
 import com.cfcs.komaxcustomer.customer_activity.FeedbackActivity;
+import com.cfcs.komaxcustomer.utils.IStringConstant;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,7 +23,7 @@ import org.ksoap2.transport.HttpTransportSE;
  * Created by Admin on 30-03-2018.
  */
 
-public class UpdateEscalation extends AsyncTask<String, String, String> {
+public class UpdateEscalation extends AsyncTask<String, String, String> implements IStringConstant {
 
     private String SOAP_ACTION = "http://cfcs.co.in/AppEscalationInsUpdt";
     private String NAMESPACE = "http://cfcs.co.in/";
@@ -34,7 +35,7 @@ public class UpdateEscalation extends AsyncTask<String, String, String> {
     ProgressDialog progressDialog;
 
     String LoginStatus;
-    String invalid = "LoginFailed";
+
 
     public UpdateEscalation(Context context) {
         this.context = context;

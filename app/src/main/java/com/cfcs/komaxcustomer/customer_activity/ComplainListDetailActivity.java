@@ -1,6 +1,7 @@
 package com.cfcs.komaxcustomer.customer_activity;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -18,7 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -26,6 +30,7 @@ import android.widget.TextView;
 import com.cfcs.komaxcustomer.LoginActivity;
 import com.cfcs.komaxcustomer.R;
 import com.cfcs.komaxcustomer.config_customer.Config_Customer;
+import com.cfcs.komaxcustomer.utils.IStringConstant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,9 +41,11 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
-public class ComplainListDetailActivity extends AppCompatActivity {
+public class ComplainListDetailActivity extends AppCompatActivity implements IStringConstant,PopupMenu.OnMenuItemClickListener {
 
     private static String SOAP_ACTION1 = "http://cfcs.co.in/AppComplainDetail";
     private static String NAMESPACE = "http://cfcs.co.in/";
@@ -63,17 +70,64 @@ public class ComplainListDetailActivity extends AppCompatActivity {
 
     LinearLayout.LayoutParams layoutparams;
 
+    View view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complain_list_detail);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
-            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.custom_action_item_layout);
+            view =Objects.requireNonNull(getSupportActionBar()).getCustomView();
         }
 
+
+        AppCompatImageView menu_action_bar = view.findViewById(R.id.menu_action_bar);
+        TextView cart_badge = view.findViewById(R.id.cart_badge);
+
+        AppCompatImageView cart_image = view.findViewById(R.id.cart_image);
+
+        String ComplaintCount = Config_Customer.getSharedPreferences(ComplainListDetailActivity.this, "pref_Customer", "ComplaintCount", "");
+        cart_badge.setText(ComplaintCount);
+
+        menu_action_bar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu popupMenu = new PopupMenu(ComplainListDetailActivity.this, v);
+                try {
+                    Field[] fields = popupMenu.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        if ("mPopup".equals(field.getName())) {
+                            field.setAccessible(true);
+                            Object menuPopupHelper = field.get(popupMenu);
+                            Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                            Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                            setForceIcons.invoke(menuPopupHelper, true);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                popupMenu.setOnMenuItemClickListener(ComplainListDetailActivity.this);
+                popupMenu.inflate(R.menu.menu_main);
+                popupMenu.show();
+
+            }
+        });
+
+        cart_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ComplainListDetailActivity.this,ComplaintsActivity.class);
+                startActivity(i);
+            }
+        });
 
         txt_complain_no = findViewById(R.id.txt_complain_no);
         txt_plant = findViewById(R.id.txt_plant);
@@ -133,10 +187,14 @@ public class ComplainListDetailActivity extends AppCompatActivity {
             new ComplainDetailAsy().execute();
 
         } else {
-            Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", ComplainListDetailActivity.this);
+            Config_Customer.toastShow(NoInternetConnection, ComplainListDetailActivity.this);
         }
+    }
 
-
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        Config_Customer.menuNavigation(ComplainListDetailActivity.this,item);
+        return false;
     }
 
 
@@ -150,7 +208,7 @@ public class ComplainListDetailActivity extends AppCompatActivity {
         JSONArray complainSub;
 
         String LoginStatus;
-        String invalid = "LoginFailed";
+
 
 
         TextView txt_sub_engineer_name;
@@ -266,10 +324,8 @@ public class ComplainListDetailActivity extends AppCompatActivity {
                     String ComplainType = jsonObject.getString("ComplaintTypeText").toString();
                     txt_complain_type_detail.setText(ComplainType);
 
-
                     String ComplainTimeText1 = jsonObject.getString("ComplainDateTimeText").toString();
                     txt_complain_detail_time.setText(ComplainTimeText1);
-
 
                     String ComplainOccure = jsonObject.getString("TimeOfOccuranceDateTimeText").toString();
                     txt_complain_occurrence_detail.setText(ComplainOccure);
@@ -291,7 +347,6 @@ public class ComplainListDetailActivity extends AppCompatActivity {
 
                     String WorkStatus = jsonObject.getString("WorkStatusName").toString();
                     txt_work_status_detail.setText(WorkStatus);
-
 
                     String Description = jsonObject.getString("Description").toString();
                     txt_description_detail.setText(Description);
@@ -388,7 +443,7 @@ public class ComplainListDetailActivity extends AppCompatActivity {
                             new ComplainDetailAsy().execute();
 
                         } else {
-                            Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", ComplainListDetailActivity.this);
+                            Config_Customer.toastShow(NoInternetConnection, ComplainListDetailActivity.this);
                         }
                     }
                 });
@@ -409,98 +464,4 @@ public class ComplainListDetailActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.dashboard:
-                Intent intent;
-                intent = new Intent(ComplainListDetailActivity.this, DashboardActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_call_us_menu:
-                int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-                if (currentapiVersion <= 22) {
-                    String CompanyContactNo = Config_Customer.getSharedPreferences(ComplainListDetailActivity.this, "pref_Customer", "CompanyContactNo", "");
-                    intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                    startActivity(intent);
-                } else {
-                    if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
-                    } else {
-                        String CompanyContactNo = Config_Customer.getSharedPreferences(ComplainListDetailActivity.this, "pref_Customer", "CompanyContactNo", "");
-                        intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                        startActivity(intent);
-                    }
-                }
-
-                return (true);
-
-            case R.id.btn_arrange_call_menu:
-                intent = new Intent(ComplainListDetailActivity.this, ArrangeCallActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_raise_complaint_menu:
-                intent = new Intent(ComplainListDetailActivity.this, RaiseComplaintActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_complaint_menu:
-                intent = new Intent(ComplainListDetailActivity.this, ComplaintsActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_machines_menu:
-                intent = new Intent(ComplainListDetailActivity.this, MachinesActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_feedback_menu:
-                intent = new Intent(ComplainListDetailActivity.this, FeedbackActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.profile:
-                intent = new Intent(ComplainListDetailActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.change_password:
-
-                intent = new Intent(ComplainListDetailActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.logout:
-
-                Config_Customer.logout(ComplainListDetailActivity.this);
-                finish();
-                Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
-                return (true);
-
-            case R.id.download_file:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
-                startActivity(browserIntent);
-                return (true);
-
-        }
-        return (super.onOptionsItemSelected(item));
-    }
 }

@@ -1,19 +1,10 @@
 package com.cfcs.komaxcustomer;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.widget.ProgressBar;
 
 import com.cfcs.komaxcustomer.config_customer.Config_Customer;
@@ -21,11 +12,12 @@ import com.cfcs.komaxcustomer.customer_activity.DashboardActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import static com.cfcs.komaxcustomer.utils.IStringConstant.NoInternetConnection;
 
 public class SplashActivity extends Activity {
 
@@ -55,12 +47,12 @@ public class SplashActivity extends Activity {
             public void run() {
 
                 Config_Customer.isOnline(SplashActivity.this);
-                if (Config_Customer.internetStatus == true) {
+                if (Config_Customer.internetStatus) {
 
                     new LoginCheck().execute();
 
                 } else {
-                    Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", SplashActivity.this);
+                    Config_Customer.toastShow(NoInternetConnection, SplashActivity.this);
                     finish();
                 }
 

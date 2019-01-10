@@ -30,6 +30,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import static com.cfcs.komaxcustomer.utils.IStringConstant.NoInternetConnection;
+
 public class ForgetPasswordActivity extends Activity {
 
     private static String SOAP_ACTION1 = "http://tempuri.org/AppUserForgetPassword";
@@ -78,7 +80,7 @@ public class ForgetPasswordActivity extends Activity {
                         new ForgotPasswordAsync().execute();
 
                     } else {
-                        Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", ForgetPasswordActivity.this);
+                        Config_Customer.toastShow(NoInternetConnection, ForgetPasswordActivity.this);
                     }
                 }
 

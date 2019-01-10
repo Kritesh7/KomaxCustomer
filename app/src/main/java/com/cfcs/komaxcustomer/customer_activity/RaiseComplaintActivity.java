@@ -1,6 +1,7 @@
 package com.cfcs.komaxcustomer.customer_activity;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -18,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -33,8 +35,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,6 +49,7 @@ import com.cfcs.komaxcustomer.LoginActivity;
 import com.cfcs.komaxcustomer.R;
 import com.cfcs.komaxcustomer.config_customer.Config_Customer;
 import com.cfcs.komaxcustomer.models.DecodeImageBean;
+import com.cfcs.komaxcustomer.utils.IStringConstant;
 import com.cfcs.komaxcustomer.utils.SimpleSpanBuilder;
 import com.google.gson.Gson;
 
@@ -58,6 +63,8 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,7 +75,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class RaiseComplaintActivity extends AppCompatActivity {
+public class RaiseComplaintActivity extends AppCompatActivity implements IStringConstant,PopupMenu.OnMenuItemClickListener {
 
 
     private static String SOAP_ACTION1 = "http://cfcs.co.in/AppComplainInsUpdt";
@@ -132,18 +139,64 @@ public class RaiseComplaintActivity extends AppCompatActivity {
 
     TextView tv_request_title, tv_problem_date, tv_plant, tv_machine_serial, tv_machine_model,txt_complaint_date,tv_problem_description,asm_txt_show;
 
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raise_complaint);
 
-        //Set Company logo in action bar with AppCompatActivity
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-            Objects.requireNonNull(getSupportActionBar()).setLogo(R.drawable.logo_komax);
-            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.custom_action_item_layout);
+            view =Objects.requireNonNull(getSupportActionBar()).getCustomView();
         }
+
+
+        AppCompatImageView menu_action_bar = view.findViewById(R.id.menu_action_bar);
+        TextView cart_badge = view.findViewById(R.id.cart_badge);
+
+        AppCompatImageView cart_image = view.findViewById(R.id.cart_image);
+
+        String ComplaintCount = Config_Customer.getSharedPreferences(RaiseComplaintActivity.this, "pref_Customer", "ComplaintCount", "");
+        cart_badge.setText(ComplaintCount);
+
+        menu_action_bar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu popupMenu = new PopupMenu(RaiseComplaintActivity.this, v);
+                try {
+                    Field[] fields = popupMenu.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        if ("mPopup".equals(field.getName())) {
+                            field.setAccessible(true);
+                            Object menuPopupHelper = field.get(popupMenu);
+                            Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                            Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                            setForceIcons.invoke(menuPopupHelper, true);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                popupMenu.setOnMenuItemClickListener(RaiseComplaintActivity.this);
+                popupMenu.inflate(R.menu.menu_main);
+                popupMenu.show();
+            }
+        });
+
+        cart_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(RaiseComplaintActivity.this,ComplaintsActivity.class);
+                startActivity(i);
+            }
+        });
 
         tv_request_title = findViewById(R.id.tv_request_title);
         tv_problem_date = findViewById(R.id.tv_problem_date);
@@ -203,7 +256,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             new SetdataInSpinner().execute();
 
         } else {
-            Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", RaiseComplaintActivity.this);
+            Config_Customer.toastShow(NoInternetConnection, RaiseComplaintActivity.this);
         }
 
         myCalendar = Calendar.getInstance();
@@ -221,7 +274,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Config_Customer.isOnline(RaiseComplaintActivity.this);
-                if (Config_Customer.internetStatus == true) {
+                if (Config_Customer.internetStatus) {
 
                     int complaintTilte = spinner_complain_title.getSelectedItemPosition();
                     int plantPos = spinner_plant.getSelectedItemPosition();
@@ -273,7 +326,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", RaiseComplaintActivity.this);
+                    Config_Customer.toastShow(NoInternetConnection, RaiseComplaintActivity.this);
                 }
 
 
@@ -291,9 +344,6 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 spinner_complain_title.requestFocus();
             }
         });
-
-
-//        txt_complaint_date = (TextView) findViewById(R.id.txt_complaint_date);
 
         txt_complaint_date.setOnClickListener(new View.OnClickListener() {
 
@@ -320,7 +370,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Config_Customer.isOnline(RaiseComplaintActivity.this);
-                if (Config_Customer.internetStatus == true) {
+                if (Config_Customer.internetStatus) {
 
                     long SelectedPlant = adapterView.getSelectedItemId();
                     SelctedPlantID = siteIDList.get((int) SelectedPlant);
@@ -341,7 +391,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", RaiseComplaintActivity.this);
+                    Config_Customer.toastShow(NoInternetConnection, RaiseComplaintActivity.this);
                 }
 
             }
@@ -376,7 +426,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", RaiseComplaintActivity.this);
+                    Config_Customer.toastShow(NoInternetConnection, RaiseComplaintActivity.this);
                 }
 
 
@@ -409,7 +459,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
 
 
                 } else {
-                    Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", RaiseComplaintActivity.this);
+                    Config_Customer.toastShow(NoInternetConnection, RaiseComplaintActivity.this);
                 }
 
             }
@@ -545,6 +595,12 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        Config_Customer.menuNavigation(RaiseComplaintActivity.this,item);
+        return false;
+    }
+
 
     private class SetdataInSpinner extends AsyncTask<String, String, String> {
 
@@ -554,7 +610,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         ProgressDialog progressDialog;
         int count = 0;
         String LoginStatus;
-        String invalid = "LoginFailed";
+
 
         @Override
         protected void onPreExecute() {
@@ -734,7 +790,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                             btn_submit.setEnabled(true);
 
                         } else {
-                            Config_Customer.toastShow("No Internet Connection! Please Reconnect Your Internet", RaiseComplaintActivity.this);
+                            Config_Customer.toastShow(NoInternetConnection, RaiseComplaintActivity.this);
                         }
                     }
                 });
@@ -958,7 +1014,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         String machine_change_detail_value;
         ProgressDialog progressDialog;
         String LoginStatus;
-        String invalid = "LoginFailed";
+
 
 
         @Override
@@ -1094,7 +1150,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         String jsonValue, msg;
 
         String LoginStatus;
-        String invalid = "LoginFailed";
+
         String valid = "success";
         ProgressDialog progressDialog;
 
@@ -1201,97 +1257,4 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.dashboard:
-                Intent intent;
-                intent = new Intent(RaiseComplaintActivity.this, DashboardActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_call_us_menu:
-                int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-                if (currentapiVersion <= 22) {
-                    String CompanyContactNo = Config_Customer.getSharedPreferences(RaiseComplaintActivity.this, "pref_Customer", "CompanyContactNo", "");
-                    intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                    startActivity(intent);
-                } else {
-                    if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
-                    } else {
-                        String CompanyContactNo = Config_Customer.getSharedPreferences(RaiseComplaintActivity.this, "pref_Customer", "CompanyContactNo", "");
-                        intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + CompanyContactNo));
-                        startActivity(intent);
-                    }
-                }
-                return (true);
-
-            case R.id.btn_arrange_call_menu:
-                intent = new Intent(RaiseComplaintActivity.this, ArrangeCallActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_raise_complaint_menu:
-                intent = new Intent(RaiseComplaintActivity.this, RaiseComplaintActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_complaint_menu:
-                intent = new Intent(RaiseComplaintActivity.this, ComplaintsActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_machines_menu:
-                intent = new Intent(RaiseComplaintActivity.this, MachinesActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.btn_feedback_menu:
-                intent = new Intent(RaiseComplaintActivity.this, FeedbackActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.profile:
-                intent = new Intent(RaiseComplaintActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.change_password:
-
-                intent = new Intent(RaiseComplaintActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
-                finish();
-                return (true);
-
-            case R.id.logout:
-
-                Config_Customer.logout(RaiseComplaintActivity.this);
-                finish();
-                Config_Customer.putSharedPreferences(this, "checklogin", "status", "2");
-                return (true);
-
-            case R.id.download_file:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://app.komaxindia.co.in/Customer/Customer-User-Manual.pdf"));
-                startActivity(browserIntent);
-                return (true);
-
-        }
-        return (super.onOptionsItemSelected(item));
-    }
 }

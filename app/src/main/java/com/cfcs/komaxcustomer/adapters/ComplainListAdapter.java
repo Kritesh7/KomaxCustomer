@@ -27,6 +27,7 @@ import com.cfcs.komaxcustomer.config_customer.Config_Customer;
 import com.cfcs.komaxcustomer.customer_activity.ComplainFeedbackActivity;
 import com.cfcs.komaxcustomer.customer_activity.ComplainListDetailActivity;
 import com.cfcs.komaxcustomer.customer_activity.ComplaintsActivity;
+import com.cfcs.komaxcustomer.customer_activity.ServiceReport;
 import com.cfcs.komaxcustomer.models.ComplainListDataModel;
 import com.cfcs.komaxcustomer.models.EscalationDataModel;
 
@@ -232,6 +233,18 @@ public class ComplainListAdapter extends BaseAdapter {
             }
         });
 
+        mViewHolder.linearLayoutServiceReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(context,ServiceReport.class);
+                i.putExtra("ComplainNo", currentListData.getComplainNo());
+                context.startActivity(i);
+
+
+            }
+        });
+
 
         return view;
     }
@@ -241,7 +254,7 @@ public class ComplainListAdapter extends BaseAdapter {
                 txt_engineer, txt_compalint_status, txt_status, txt_level;
         RadioGroup radioGroup;
         CardView card_view;
-        LinearLayout card_view_linear, linearLayoutfeedback;
+        LinearLayout card_view_linear, linearLayoutfeedback,linearLayoutServiceReport;
 
         MyViewHolder(View view) {
             card_view = view.findViewById(R.id.card_view);
@@ -258,6 +271,7 @@ public class ComplainListAdapter extends BaseAdapter {
             txt_level = view.findViewById(R.id.txt_level);
             radioGroup = view.findViewById(R.id.radioGroup);
             linearLayoutfeedback = view.findViewById(R.id.linearLayoutfeedback);
+            linearLayoutServiceReport = view.findViewById(R.id.linearLayoutServiceReport);
 
         }
     }

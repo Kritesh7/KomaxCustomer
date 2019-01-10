@@ -38,7 +38,9 @@ public class CustomerBroadcastReciever extends BroadcastReceiver {
         firstTime += 3 * 1000;//start 3 seconds after first register.
         // Schedule the alarm!
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, 60000, sender);//5 min interval
+        if (am != null) {
+            am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, 60000, sender);//5 min interval
+        }
 
         Log.e(" Zonal Service Started", "11");
 
